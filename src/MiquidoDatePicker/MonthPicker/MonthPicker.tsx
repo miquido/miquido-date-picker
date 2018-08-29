@@ -1,7 +1,7 @@
 import { style } from 'typestyle'
 import * as React from 'react'
 import Month from '../Month/Month'
-import { IMonthObject } from '../index'
+import { IMonthObject } from '../interfaces'
 
 interface IMonthPicker {
   months: IMonthObject[]
@@ -10,6 +10,23 @@ interface IMonthPicker {
 }
 
 const PickMonth = (props: IMonthPicker) => {
+  // const pickerDate = style({
+  //   minWidth: '250px',
+  //   padding: '0 15px',
+  //   maxWidth: (35 * 7) + 'px',
+  //   display: 'flex',
+  //   alignContent: 'space-between',
+  //   justifyContent: 'space-between',
+  //   flexWrap: 'wrap',
+  //   fontFamily: 'Rubik, sans-serif',
+  //   backgroundColor: '#ffffff',
+  //   borderRadius: '1px',
+  //   boxSizing: 'border-box',
+  //   position: 'absolute',
+  //   top: '50px',
+  //   left: 0,
+  //   minHeight: '245px'
+  // })
   const pickerDate = style({
     minWidth: '250px',
     padding: '0 15px',
@@ -18,14 +35,14 @@ const PickMonth = (props: IMonthPicker) => {
     alignContent: 'space-between',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
-    fontFamily: 'Rubik, sans-serif',
+    fontFamily: 'Roboto, sans-serif',
     backgroundColor: '#ffffff',
     borderRadius: '1px',
     boxSizing: 'border-box',
     position: 'absolute',
     top: '50px',
-    left: 0,
-    minHeight: '245px'
+    left: '50%',
+    transform: 'translateX(-50%)'
   })
 
   const monthsGrid = props.months.map((month: IMonthObject, index: number) => (

@@ -1,9 +1,10 @@
-import { IDaysEventsHandlers } from '../index'
+import { IDaysEventsHandlers } from '../interfaces'
 
 export interface IPickDayProps {
   key?: number,
   days: object[],
-  eventsHandlers: IDaysEventsHandlers
+  eventsHandlers: IDaysEventsHandlers,
+  pastDaysAmount: number
 }
 
 export default IPickDayProps

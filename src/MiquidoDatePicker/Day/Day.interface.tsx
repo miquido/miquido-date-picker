@@ -1,4 +1,4 @@
-import { IDaysEventsHandlers } from '../index'
+import { IDaysEventsHandlers } from '../interfaces'
 
 export interface Iday {
   key: string

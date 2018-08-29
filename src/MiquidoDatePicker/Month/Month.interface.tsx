@@ -1,4 +1,4 @@
-import { IMonthEventsHandlers } from '../index'
+import { IMonthEventsHandlers } from '../interfaces'
 
 export interface IMonth {
   selected?: boolean
