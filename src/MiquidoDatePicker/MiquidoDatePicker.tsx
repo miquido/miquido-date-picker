@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { style } from 'typestyle'
 import HeaderMenu from './HeaderMenu/HeaderMenu'
 import YearPicker from './YearPicker/YearPicker'
 import MonthPicker from './MonthPicker/MonthPicker'
@@ -9,11 +8,14 @@ import FooterMenu from './FooterMenu/FooterMenu'
 import { IMonthObject, IYearObject, Props, State } from './interfaces'
 import { pickingOptions } from './enums'
 import { monthNames } from './consts'
-import { generateCalendar, getFirstMondayIndex, selectDate, unselectDate } from './functions'
+import { generateCalendar, getClassFor, getFirstMondayIndex, selectDate, unselectDate } from './functions'
+import { pickerWrapper, picker } from './MiquidoDatePicker.classname'
+import { defaultTheme } from '../themes/default/default_theme'
 
 class MiquidoDatePicker extends React.Component<Props, State> {
   now = new Date()
   currentMonth = this.now.getMonth()
+  theme = {}
 
   constructor (props: Props) {
     super(props)
@@ -30,11 +32,10 @@ class MiquidoDatePicker extends React.Component<Props, State> {
       selectedYear: this.now.getFullYear(),
       inputVal: undefined
     }
-
+    this.theme = props.theme || defaultTheme
   }
 
   getMonthName (index: number) {
-
     if (!Number.isInteger(index)) {
       return monthNames[this.now.getMonth() + 1]
     } else {
@@ -50,21 +51,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     const calendarInit = generateCalendar(month, year)
     this.setState({ daysArray: calendarInit })
   }
-
-  // pickerWrapperClass = style({
-  //   position: 'relative',
-  //   display: 'inline-block',
-  //   fontSize: '62.5%',
-  //   boxSizing: 'border-box',
-  //   width: '250px'
-  // })
-  pickerWrapperClass = style({
-    position: 'relative',
-    display: 'inline-block',
-    fontSize: '62.5%',
-    boxSizing: 'border-box',
-    width: '450px'
-  })
 
   mouseOverHandler = (index: number) => {
     if (!this.state.selectionStart || this.state.selectionEnd) return
@@ -176,10 +162,10 @@ class MiquidoDatePicker extends React.Component<Props, State> {
         name: monthName,
         itemIndex: index,
         selected: this.state.selectedMonth === monthName,
-        eventsHandlers: this.monthEventsHandlers
+        eventsHandlers: this.monthEventsHandlers,
+        theme: this.theme
       }
     })
-
   }
 
   getYears = (): IYearObject[] => {
@@ -213,11 +199,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     this.setState({ isPickerVisible: false })
   }
 
-  pickerWrapper = style({
-    position: 'relative',
-    backgroundColor: '#ffffff'
-  })
-
   switchToYearSelect () {
     this.setState({ currentlyPicking: pickingOptions.YEAR })
   }
@@ -248,10 +229,11 @@ class MiquidoDatePicker extends React.Component<Props, State> {
 
   render () {
     return (
-      <div className={this.pickerWrapperClass} onContextMenu={(e) => {
-        // e.preventDefault()
-        // return false
-      }}>
+      <div className={getClassFor({ key: 'pickerWrapper', theme: this.theme, defaultClass: pickerWrapper })}
+           onContextMenu={(e) => {
+             // e.preventDefault()
+             // return false
+           }}>
         {React.cloneElement(
           this.props.children, {
             value: this.state.inputVal,
@@ -260,22 +242,36 @@ class MiquidoDatePicker extends React.Component<Props, State> {
           })
         }
         {this.state.isPickerVisible &&
-        <div onClick={e => e.stopPropagation()} className={this.pickerWrapper}>
+        <div onClick={e => e.stopPropagation()}
+             className={getClassFor({ key: 'picker', theme: this.theme, defaultClass: picker })}>
           <HeaderMenu displayYear={this.state.selectedYear}
                       displayMonth={this.state.selectedMonth}
                       switchToYearSelect={this.switchToYearSelect.bind(this)}
                       switchToMonthSelect={this.switchToMonthSelect.bind(this)}
                       nextMonth={this.nextMonth.bind(this)}
                       prevMonth={this.prevMonth.bind(this)}
+                      theme={this.theme}
           />
-          {this.state.currentlyPicking === pickingOptions.YEAR && <YearPicker years={this.getYears()}/>}
+          {this.state.currentlyPicking === pickingOptions.YEAR &&
+          <YearPicker years={this.getYears()}
+                      theme={this.theme}
+          />}
           {this.state.currentlyPicking === pickingOptions.MONTH &&
-          <MonthPicker months={this.getMonths()} eventsHandlers={this.eventsHandlers}/>}
-          <DaysHeader/>
+          <MonthPicker months={this.getMonths()} eventsHandlers={this.eventsHandlers}
+                       theme={this.theme}
+          />}
+          <DaysHeader
+            theme={this.theme}
+          />
           <PickDay pastDaysAmount={getFirstMondayIndex(this.state.selectedMonthIndex, this.now.getFullYear())}
                    days={this.state.daysArray}
-                   eventsHandlers={this.eventsHandlers}/>
-          <FooterMenu clear={this.clearSelection.bind(this)} save={this.saveSelection.bind(this)}/>
+                   eventsHandlers={this.eventsHandlers}
+                   theme={this.theme}
+          />
+          <FooterMenu clear={this.clearSelection.bind(this)}
+                      save={this.saveSelection.bind(this)}
+                      theme={this.theme}
+          />
         </div>
         }
       </div>

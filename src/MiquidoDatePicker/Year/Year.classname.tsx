@@ -1,15 +1,16 @@
 import { style } from 'typestyle'
 
-export const monthClass = style({
-  width: '55px',
-  height: '35px',
+export const baseClass = style({
+  width: '49px',
+  height: '29px',
   fontSize: '12px',
   fontWeight: 300,
-  lineHeight: '35px',
+  lineHeight: '29px',
   textAlign: 'center',
   userSelect: 'none',
   cursor: 'pointer',
   margin: '17px 6px',
+  boxSizing: 'border-box',
   $nest: {
     '&:hover': {
       color: '#333333',
@@ -19,16 +20,9 @@ export const monthClass = style({
   }
 })
 
-export const selectedMonthClass = style({
-  color: '#ffffff',
+export const selectedClass = style({
   backgroundColor: '#ff5b9e',
   fontWeight: 400,
-  borderRadius: '2px',
-  $nest: {
-    '&:hover': {
-      color: '#ffffff',
-      backgroundColor: '#ff5b9e',
-      borderRadius: '2px'
-    }
-  }
+  color: '#ffffff',
+  borderRadius: '2px'
 })

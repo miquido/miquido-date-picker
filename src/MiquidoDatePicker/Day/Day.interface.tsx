@@ -1,4 +1,5 @@
 import { IDaysEventsHandlers } from '../interfaces'
+import { ITheme } from '../../themes/theme.interface'
 
 export interface Iday {
   key: string
@@ -10,4 +11,5 @@ export interface Iday {
   end?: boolean
   eventsHandlers?: IDaysEventsHandlers
   disabled?: boolean
+  theme: ITheme | undefined
 }

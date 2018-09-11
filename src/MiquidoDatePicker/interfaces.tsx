@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { pickingOptions, selectMethods } from './enums'
+import { ITheme } from '../themes/theme.interface'
 
 export interface IDaysEventsHandlers {
   mouseUpHandler: (index: number) => void
@@ -30,6 +31,7 @@ export interface IMonthObject {
   itemIndex: number
   selected: boolean
   eventsHandlers: { clickHandler: (index: number) => void }
+  theme: ITheme
 }
 
 export interface IYearObject {
@@ -41,6 +43,7 @@ export interface IYearObject {
 
 export interface Props {
   children: React.ReactElement<any>
+  theme?: ITheme
 }
 
 export interface State {

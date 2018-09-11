@@ -1,15 +1,39 @@
 import * as React from 'react'
 import { Iday } from './Day.interface'
 import * as className from './Day.classname'
+import { getClassFor } from '../functions'
 
 const Day = (props: Iday) => {
-
-  const baseClass = className.dayClass + ' ' +
-    (props.start ? className.selectionStartClass + ' ' : '') +
-    (props.end ? className.selectionEndClass + ' ' : '') +
-    (props.selected ? className.selectedDayClass + ' ' : '') +
-    (props.today ? className.todayClass : '') +
-    (props.disabled ? className.disabledClass + ' ' : '')
+  const baseClass = getClassFor({
+    key: 'dayItem',
+    theme: props.theme,
+    defaultClass: className.dayClass
+  }) + ' ' +
+    (props.start ? getClassFor({
+      key: 'selectionStart',
+      theme: props.theme && props.theme.status,
+      defaultClass: className.selectionStartClass
+    }) + ' ' : '') +
+    (props.end ? getClassFor({
+      key: 'selectionEnd',
+      theme: props.theme && props.theme.status,
+      defaultClass: className.selectionEndClass
+    }) + ' ' : '') +
+    (props.selected ? getClassFor({
+      key: 'day',
+      theme: props.theme && props.theme.selected,
+      defaultClass: className.selectedDayClass
+    }) + ' ' : '') +
+    (props.today ? getClassFor({
+      key: 'today',
+      theme: props.theme && props.theme.status,
+      defaultClass: className.todayClass
+    }) + ' ' : '') +
+    (props.disabled ? getClassFor({
+      key: 'disabled',
+      theme: props.theme && props.theme.status,
+      defaultClass: className.disabledClass
+    }) + ' ' : '')
 
   return (
     <div className={baseClass}
