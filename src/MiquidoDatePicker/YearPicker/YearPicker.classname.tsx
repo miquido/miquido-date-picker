@@ -1,6 +1,6 @@
 import { style } from 'typestyle'
 
-export const pickerDate = style({
+export const YearPickerWrapper = style({
   minWidth: '250px',
   padding: '0 15px',
   maxWidth: (35 * 7) + 'px',

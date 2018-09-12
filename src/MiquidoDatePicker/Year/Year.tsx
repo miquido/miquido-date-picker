@@ -1,17 +1,17 @@
 import * as React from 'react'
-import { IYearEventsHandlers } from '../interfaces'
 import { baseClass, selectedClass } from './Year.classname'
-
-interface IYear {
-  displayValue: number | string
-  selected?: boolean
-  eventsHandlers: IYearEventsHandlers
-  itemIndex: number
-}
+import { IYear } from './Year.interface'
+import { getClassFor } from '../functions'
 
 const Year = (props: IYear) => {
 
-  const className = baseClass + ' ' + (props.selected ? selectedClass : '')
+  const className = getClassFor({ key: 'year', theme: props.theme, defaultClass: baseClass }) + ' ' +
+    (props.selected ? getClassFor({
+      key: 'year',
+      theme: props.theme && props.theme.selected,
+      defaultClass: selectedClass
+    }) + ' ' : '')
+
   return (
     <div className={className}
          onClick={(_) => props.eventsHandlers && props.eventsHandlers.clickHandler(+props.displayValue)}
