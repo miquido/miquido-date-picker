@@ -3,7 +3,6 @@ import { style } from 'typestyle'
 export const pickerDate = style({
   minWidth: '250px',
   padding: '0 15px',
-  maxWidth: (35 * 7) + 'px',
   display: 'flex',
   alignContent: 'flex-start',
   flexWrap: 'wrap',

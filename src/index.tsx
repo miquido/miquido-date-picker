@@ -34,7 +34,6 @@ cssRaw(`
   @TODO:change selection type by props ( single -> range )
   @TODO:change selection on input typing
   @TODO:add prop to block picking past dates
-  @TODO: next month in december should change year
   @TODO: add losing when user click outside
   @TODO: add browser edges detection
   @TODO: add prop to pick date format?

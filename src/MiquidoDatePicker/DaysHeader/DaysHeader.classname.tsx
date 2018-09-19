@@ -13,7 +13,7 @@ export const baseClass = style({
   alignItems: 'center',
   backgroundColor: '#ffffff',
   borderBottom: 'rgba(196, 197, 202, 0.2)',
-  padding: '0 20px',
+  padding: '0 15px',
   fontFamily: 'Rubik',
   boxSizing: 'border-box',
   width: '100%'
@@ -22,5 +22,7 @@ export const baseClass = style({
 export const itemClass = style({
   width: '35px',
   height: '35px',
-  textAlign: 'center'
+  textAlign: 'center',
+  flex: '1 1 35px',
+  lineHeight: '35px'
 })

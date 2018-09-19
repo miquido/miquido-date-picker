@@ -38,6 +38,11 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     this.node = React.createRef()
   }
 
+  /**
+   * Get month name from array
+   *
+   * @param index index of month from 0 to 11
+   */
   getMonthName (index: number) {
     if (!Number.isInteger(index)) {
       return monthNames[this.now.getMonth() + 1]
@@ -58,11 +63,24 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     this.initDaysCalendar(this.currentMonth, this.now.getFullYear())
   }
 
+  /**
+   * Init calendar on given month and year
+   *
+   * @param month index of month from 0 to 11
+   * @param year year number eg 2018
+   */
   initDaysCalendar (month: number, year: number) {
+    console.log(month, year)
     const calendarInit = generateCalendar(month, year)
     this.setState({ daysArray: calendarInit })
   }
 
+  /**
+   * Supports mouse over on days
+   * if user selected start date also select days
+   *
+   * @param index index of a day
+   */
   mouseOverHandler = (index: number) => {
     const start = this.state.selectionStart
     if (start === undefined || this.state.selectionEnd) return
@@ -81,6 +99,11 @@ class MiquidoDatePicker extends React.Component<Props, State> {
 
   }
 
+  /**
+   * Supports click on days
+   *
+   * @param index index of a day
+   */
   clickHandler = (index: number) => {
     const days = this.state.daysArray
     const start = this.state.selectionStart
@@ -106,14 +129,28 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     }
   }
 
+  /**
+   * Supports mouse down on days
+   *
+   * @param index index of a day
+   */
   mouseDownHandler = (index: number) => {
     // window.document.addEventListener('mouseup', this._onMouseUp)
   }
 
+  /**
+   * Supports mouse up on days
+   *
+   * @param index index of a day
+   */
   mouseUpHandler = (index: number) => {
     // window.document.removeEventListener('mouseup', this._onMouseUp)
   }
 
+  /**
+   * Clear selected days
+   *
+   */
   clearSelection () {
     const days = this.state.daysArray.map((day) => {
       day.selected = false
@@ -125,6 +162,10 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     this.setState({ daysArray: days, selectionStart: undefined, selectionEnd: undefined })
   }
 
+  /**
+   * Save selection
+   *
+   */
   saveSelection () {
     if (!this.state.selectionStart || !this.state.selectionEnd) return
     const days = this.state.daysArray
@@ -134,36 +175,41 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     this.closePicker()
   }
 
+  /**
+   * Supports input value change
+   *
+   * @param event event object
+   */
   handleChange (event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ inputVal: event.target.value })
   }
 
+  /**
+   * Supports click on years
+   *
+   * @param year year in number eg. 2018
+   */
   yearClickHandler (year: number) {
     this.setState({ selectedYear: year })
     this.switchToMonthSelect()
 
   }
 
+  /**
+   * Supports click on month
+   *
+   * @param index month index
+   */
   monthClickHandler (index: number) {
     this.setState({ selectedMonth: monthNames[index], selectedMonthIndex: index })
     this.switchToDaySelect()
   }
 
-  eventsHandlers = {
-    mouseUpHandler: this.mouseUpHandler.bind(this),
-    mouseDownHandler: this.mouseDownHandler.bind(this),
-    mouseOverHandler: this.mouseOverHandler.bind(this),
-    clickHandler: this.clickHandler.bind(this)
-  }
-
-  yearEventsHandlers = {
-    clickHandler: this.yearClickHandler.bind(this)
-  }
-
-  monthEventsHandlers = {
-    clickHandler: this.monthClickHandler.bind(this)
-  }
-
+  /**
+   * Get array of month objects
+   *
+   * @return array of month objects
+   */
   getMonths = (): IMonthObject[] => {
     return monthNames.map((monthName: string, index: number): IMonthObject => {
       return {
@@ -176,6 +222,11 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     })
   }
 
+  /**
+   * Get array of year objects
+   *
+   * @return array of year objects
+   */
   getYears = (): IYearObject[] => {
     const now = new Date()
     const currentYear = now.getFullYear()
@@ -194,6 +245,12 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     return years
   }
 
+  /**
+   * Supports mouse up event
+   * detects if mouse up was on picker or outside ( and close it if so )
+   *
+   * @param e event listener object
+   */
   _onMouseUp: EventListenerOrEventListenerObject = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -205,41 +262,98 @@ class MiquidoDatePicker extends React.Component<Props, State> {
 
   }
 
-  private showPicker (i: object) {
+  /**
+   * Display picker and bind mouse up event to window
+   *
+   */
+  private showPicker () {
     window.document.addEventListener('mouseup', this._onMouseUp, true)
     this.setState({ isPickerVisible: true })
   }
 
+  /**
+   * Hide picker
+   *
+   */
   private closePicker () {
     this.setState({ isPickerVisible: false })
   }
 
+  /**
+   * Display years picker
+   *
+   */
   switchToYearSelect () {
     this.setState({ currentlyPicking: pickingOptions.YEAR })
   }
 
+  /**
+   * Display months picker
+   *
+   */
   switchToMonthSelect () {
     this.setState({ currentlyPicking: pickingOptions.MONTH })
   }
 
+  /**
+   * Display days picker ( default view )
+   *
+   */
   switchToDaySelect () {
     this.setState({ currentlyPicking: pickingOptions.DAY })
   }
 
+  /**
+   * Handle month change ( right arrow )
+   *
+   */
   nextMonth () {
     const oldMonthIndex = this.state.selectedMonthIndex
     const newMonthIndex = (oldMonthIndex + 1) % 12
 
-    this.setState({ selectedMonthIndex: newMonthIndex, selectedMonth: this.getMonthName(newMonthIndex) })
-    this.initDaysCalendar(newMonthIndex, this.now.getFullYear())
+    const oldYear = this.state.selectedYear || this.now.getFullYear()
+    const newYear = newMonthIndex === 0 ? oldYear + 1 : oldYear
+    this.setState({
+      selectedMonthIndex: newMonthIndex,
+      selectedMonth: this.getMonthName(newMonthIndex),
+      selectedYear: newYear
+    })
+    this.initDaysCalendar(newMonthIndex, newYear)
   }
 
+  /**
+   * Handle month change ( left arrow )
+   *
+   */
   prevMonth () {
     const oldMonthIndex = this.state.selectedMonthIndex
     const newMonthIndex = (oldMonthIndex - 1) % 12 < 0 ? 11 : (oldMonthIndex - 1) % 12
 
-    this.setState({ selectedMonthIndex: newMonthIndex, selectedMonth: this.getMonthName(newMonthIndex) })
-    this.initDaysCalendar(newMonthIndex, this.now.getFullYear())
+    const oldYear = this.state.selectedYear || this.now.getFullYear()
+    const newYear = newMonthIndex === 11 ? oldYear - 1 : oldYear
+    console.log(newMonthIndex, newYear)
+
+    this.setState({
+      selectedMonthIndex: newMonthIndex,
+      selectedMonth: this.getMonthName(newMonthIndex),
+      selectedYear: newYear
+    })
+    this.initDaysCalendar(newMonthIndex, newYear)
+  }
+
+  eventsHandlers = {
+    mouseUpHandler: this.mouseUpHandler.bind(this),
+    mouseDownHandler: this.mouseDownHandler.bind(this),
+    mouseOverHandler: this.mouseOverHandler.bind(this),
+    clickHandler: this.clickHandler.bind(this)
+  }
+
+  yearEventsHandlers = {
+    clickHandler: this.yearClickHandler.bind(this)
+  }
+
+  monthEventsHandlers = {
+    clickHandler: this.monthClickHandler.bind(this)
   }
 
   render () {
