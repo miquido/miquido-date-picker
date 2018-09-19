@@ -44,7 +44,7 @@ export const getFirstMondayIndex = (month: number, year: number) => {
 }
 
 export const defaultClassNameShouldBeOverwritten = (theme: object | undefined, key: string) => {
-  return theme && theme.hasOwnProperty(key)
+  return theme && theme.hasOwnProperty(key) && theme[key]
 }
 
 interface IGetClassObject {
@@ -55,7 +55,7 @@ interface IGetClassObject {
 
 export const getClassFor = (args: IGetClassObject): string => {
   const { key, theme, defaultClass } = args
-  console.log(key)
+  // console.log(key)
   if (theme && defaultClassNameShouldBeOverwritten(theme, key)) {
     return theme[key]
   } else {

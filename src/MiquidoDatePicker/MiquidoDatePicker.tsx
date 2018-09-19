@@ -11,11 +11,13 @@ import { monthNames } from './consts'
 import { generateCalendar, getClassFor, getFirstMondayIndex, selectDate, unselectDate } from './functions'
 import { pickerWrapper, picker } from './MiquidoDatePicker.classname'
 import { defaultTheme } from '../themes/default/default_theme'
+import { CSSTransition } from 'react-transition-group'
 
 class MiquidoDatePicker extends React.Component<Props, State> {
   now = new Date()
   currentMonth = this.now.getMonth()
   theme = {}
+  private node: any
 
   constructor (props: Props) {
     super(props)
@@ -33,6 +35,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
       inputVal: undefined
     }
     this.theme = props.theme || defaultTheme
+    this.node = React.createRef()
   }
 
   getMonthName (index: number) {
@@ -41,6 +44,14 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     } else {
       return monthNames[index]
     }
+  }
+
+  componentWillMount () {
+    document.addEventListener('mousedown', this._onMouseUp, false)
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('mousedown', this._onMouseUp, false)
   }
 
   componentDidMount () {
@@ -53,9 +64,9 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   }
 
   mouseOverHandler = (index: number) => {
-    if (!this.state.selectionStart || this.state.selectionEnd) return
-    const days = this.state.daysArray
     const start = this.state.selectionStart
+    if (start === undefined || this.state.selectionEnd) return
+    const days = this.state.daysArray
     const newSelection = days.map(day => {
       if (day.itemIndex <= index && day.itemIndex > start) {
         return selectDate(day)
@@ -72,9 +83,8 @@ class MiquidoDatePicker extends React.Component<Props, State> {
 
   clickHandler = (index: number) => {
     const days = this.state.daysArray
-    if (this.state.selectionStart && !this.state.selectionEnd) {
-
-      const start = this.state.selectionStart
+    const start = this.state.selectionStart
+    if (start !== undefined && !this.state.selectionEnd) {
       const newSelection = days.map((day) => {
         if (day.itemIndex <= index && day.itemIndex > start) {
           return selectDate(day)
@@ -85,7 +95,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
         }
       })
 
-      // this.setState({ selectMethod: undefined })
       this.setState({ selectionEnd: index })
       const newDaysObjArray = [...newSelection]
       newDaysObjArray[index].end = true
@@ -95,15 +104,14 @@ class MiquidoDatePicker extends React.Component<Props, State> {
       days[index].start = true
       this.setState({ selectionStart: index, selectionEnd: undefined, daysArray: days })
     }
-    // this.setState({ selectMethod: selectMethods.CLICK })
   }
 
   mouseDownHandler = (index: number) => {
-    window.document.addEventListener('mouseup', this._onMouseUp)
+    // window.document.addEventListener('mouseup', this._onMouseUp)
   }
 
   mouseUpHandler = (index: number) => {
-    window.document.removeEventListener('mouseup', this._onMouseUp)
+    // window.document.removeEventListener('mouseup', this._onMouseUp)
   }
 
   clearSelection () {
@@ -186,12 +194,19 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     return years
   }
 
-  _onMouseUp = (e: object) => {
-    console.log(e)
+  _onMouseUp: EventListenerOrEventListenerObject = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (this.node.current && !this.node.current.contains(e.target)) {
+      this.setState({
+        isPickerVisible: false
+      })
+    }
+
   }
 
   private showPicker (i: object) {
-    window.document.addEventListener('mouseup', this._onMouseUp, false)
+    window.document.addEventListener('mouseup', this._onMouseUp, true)
     this.setState({ isPickerVisible: true })
   }
 
@@ -230,50 +245,74 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   render () {
     return (
       <div className={getClassFor({ key: 'pickerWrapper', theme: this.theme, defaultClass: pickerWrapper })}
-           onContextMenu={(e) => {
-             // e.preventDefault()
-             // return false
-           }}>
+           ref={node => this.node = node}
+      >
         {React.cloneElement(
           this.props.children, {
-            value: this.state.inputVal,
+            value: this.state.inputVal || '',
             onClick: this.showPicker.bind(this, this.props.children.props),
             onChange: this.handleChange.bind(this, this.props.children.props)
           })
         }
-        {this.state.isPickerVisible &&
-        <div onClick={e => e.stopPropagation()}
-             className={getClassFor({ key: 'picker', theme: this.theme, defaultClass: picker })}>
-          <HeaderMenu displayYear={this.state.selectedYear}
-                      displayMonth={this.state.selectedMonth}
-                      switchToYearSelect={this.switchToYearSelect.bind(this)}
-                      switchToMonthSelect={this.switchToMonthSelect.bind(this)}
-                      nextMonth={this.nextMonth.bind(this)}
-                      prevMonth={this.prevMonth.bind(this)}
-                      theme={this.theme}
-          />
-          {this.state.currentlyPicking === pickingOptions.YEAR &&
-          <YearPicker years={this.getYears()}
-                      theme={this.theme}
-          />}
-          {this.state.currentlyPicking === pickingOptions.MONTH &&
-          <MonthPicker months={this.getMonths()} eventsHandlers={this.eventsHandlers}
-                       theme={this.theme}
-          />}
-          <DaysHeader
-            theme={this.theme}
-          />
-          <PickDay pastDaysAmount={getFirstMondayIndex(this.state.selectedMonthIndex, this.now.getFullYear())}
-                   days={this.state.daysArray}
-                   eventsHandlers={this.eventsHandlers}
-                   theme={this.theme}
-          />
-          <FooterMenu clear={this.clearSelection.bind(this)}
-                      save={this.saveSelection.bind(this)}
-                      theme={this.theme}
-          />
-        </div>
-        }
+        <CSSTransition
+          in={this.state.isPickerVisible}
+          timeout={300}
+          classNames='picker'
+          unmountOnExit
+          onExited={() => {
+            this.setState({
+              isPickerVisible: false
+            })
+          }}
+        >
+          <div className={getClassFor({ key: 'picker', theme: this.theme, defaultClass: picker })}>
+            <HeaderMenu displayYear={this.state.selectedYear}
+                        displayMonth={this.state.selectedMonth}
+                        switchToYearSelect={this.switchToYearSelect.bind(this)}
+                        switchToMonthSelect={this.switchToMonthSelect.bind(this)}
+                        nextMonth={this.nextMonth.bind(this)}
+                        prevMonth={this.prevMonth.bind(this)}
+                        theme={this.theme}
+            />
+            <CSSTransition
+              in={this.state.currentlyPicking === pickingOptions.YEAR}
+              timeout={300}
+              classNames='picker'
+              unmountOnExit
+              onExited={() => {
+                this.setState({
+                  currentlyPicking: pickingOptions.MONTH
+                })
+              }}
+            >
+              <YearPicker years={this.getYears()}
+                          theme={this.theme}
+              />
+            </CSSTransition>
+            <CSSTransition
+              in={this.state.currentlyPicking === pickingOptions.MONTH}
+              timeout={300}
+              classNames='picker'
+              unmountOnExit
+            >
+              <MonthPicker months={this.getMonths()} eventsHandlers={this.eventsHandlers}
+                           theme={this.theme}
+              />
+            </CSSTransition>
+            <DaysHeader
+              theme={this.theme}
+            />
+            <PickDay pastDaysAmount={getFirstMondayIndex(this.state.selectedMonthIndex, this.now.getFullYear())}
+                     days={this.state.daysArray}
+                     eventsHandlers={this.eventsHandlers}
+                     theme={this.theme}
+            />
+            <FooterMenu clear={this.clearSelection.bind(this)}
+                        save={this.saveSelection.bind(this)}
+                        theme={this.theme}
+            />
+          </div>
+        </CSSTransition>
       </div>
     )
   }

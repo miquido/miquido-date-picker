@@ -44,6 +44,7 @@ export interface IYearObject {
 export interface Props {
   children: React.ReactElement<any>
   theme?: ITheme
+  node?: React.RefObject<any>
 }
 
 export interface State {
