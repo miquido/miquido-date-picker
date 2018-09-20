@@ -31,7 +31,6 @@ cssRaw(`
 
 /*
   @TODO:add comments
-  @TODO:change selection type by props ( single -> range )
   @TODO:change selection on input typing
   @TODO:add prop to block picking past dates
   @TODO: add losing when user click outside
@@ -43,10 +42,11 @@ cssRaw(`
   @TODO: switch props for context
 
    theme={tripGateTheme}
+   singleSelection={true}
  */
 ReactDOM.render(
   <MiquidoDatePicker>
-    <input type='text' value={''}/>
+    <input type='text' value={''} />
   </MiquidoDatePicker>,
   document.getElementById('root') as HTMLElement
 )

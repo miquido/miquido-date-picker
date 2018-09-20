@@ -18,6 +18,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   currentMonth = this.now.getMonth()
   theme = {}
   private node: any
+  private singleSelection: boolean | undefined
 
   constructor (props: Props) {
     super(props)
@@ -36,6 +37,8 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     }
     this.theme = props.theme || defaultTheme
     this.node = React.createRef()
+    console.log('constr', this.node)
+    this.singleSelection = props.singleSelection
   }
 
   /**
@@ -70,7 +73,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    * @param year year number eg 2018
    */
   initDaysCalendar (month: number, year: number) {
-    console.log(month, year)
     const calendarInit = generateCalendar(month, year)
     this.setState({ daysArray: calendarInit })
   }
@@ -105,28 +107,37 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    * @param index index of a day
    */
   clickHandler = (index: number) => {
+
     const days = this.state.daysArray
     const start = this.state.selectionStart
-    if (start !== undefined && !this.state.selectionEnd) {
-      const newSelection = days.map((day) => {
-        if (day.itemIndex <= index && day.itemIndex > start) {
-          return selectDate(day)
-        } else if (day.itemIndex >= index && day.itemIndex < start) {
-          return selectDate(day)
-        } else {
-          return unselectDate(day)
-        }
-      })
-
-      this.setState({ selectionEnd: index })
-      const newDaysObjArray = [...newSelection]
-      newDaysObjArray[index].end = true
-      this.setState({ daysArray: newDaysObjArray })
-    } else {
+    if (this.singleSelection) {
       this.clearSelection()
       days[index].start = true
-      this.setState({ selectionStart: index, selectionEnd: undefined, daysArray: days })
+      this.setState({ selectionStart: index, selectionEnd: index, daysArray: days })
+      this.saveSelection(index)
+    } else {
+      if (start !== undefined && !this.state.selectionEnd) {
+        const newSelection = days.map((day) => {
+          if (day.itemIndex <= index && day.itemIndex > start) {
+            return selectDate(day)
+          } else if (day.itemIndex >= index && day.itemIndex < start) {
+            return selectDate(day)
+          } else {
+            return unselectDate(day)
+          }
+        })
+
+        this.setState({ selectionEnd: index })
+        const newDaysObjArray = [...newSelection]
+        newDaysObjArray[index].end = true
+        this.setState({ daysArray: newDaysObjArray })
+      } else {
+        this.clearSelection()
+        days[index].start = true
+        this.setState({ selectionStart: index, selectionEnd: undefined, daysArray: days })
+      }
     }
+
   }
 
   /**
@@ -166,13 +177,22 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    * Save selection
    *
    */
-  saveSelection () {
-    if (!this.state.selectionStart || !this.state.selectionEnd) return
-    const days = this.state.daysArray
-    const value = `${days[this.state.selectionStart].displayValue} - ${days[this.state.selectionEnd].displayValue}`
-      + `/${this.state.selectedMonthIndex + 1}/${this.state.selectedYear}`
-    this.setState({ inputVal: value })
-    this.closePicker()
+  saveSelection (singleIndex?: number) {
+    console.log(singleIndex)
+    if (!singleIndex || !Number.isInteger(singleIndex)) {
+      if (!this.state.selectionStart || !this.state.selectionEnd) return
+      const days = this.state.daysArray
+      const value = `${days[this.state.selectionStart].displayValue} - ${days[this.state.selectionEnd].displayValue}`
+        + `/${this.state.selectedMonthIndex + 1}/${this.state.selectedYear}`
+      this.setState({ inputVal: value })
+      this.closePicker()
+    } else {
+      const days = this.state.daysArray
+      const value = `${days[singleIndex].displayValue}`
+        + `/${this.state.selectedMonthIndex + 1}/${this.state.selectedYear}`
+      this.setState({ inputVal: value })
+      this.closePicker()
+    }
   }
 
   /**
@@ -254,7 +274,9 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   _onMouseUp: EventListenerOrEventListenerObject = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    if (this.node.current && !this.node.current.contains(e.target)) {
+    console.log('click', this.node)
+    if (!this.node.current || !this.node.current.contains(e.target)) {
+      console.log('woot')
       this.setState({
         isPickerVisible: false
       })
@@ -267,7 +289,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    *
    */
   private showPicker () {
-    window.document.addEventListener('mouseup', this._onMouseUp, true)
     this.setState({ isPickerVisible: true })
   }
 
@@ -331,7 +352,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
 
     const oldYear = this.state.selectedYear || this.now.getFullYear()
     const newYear = newMonthIndex === 11 ? oldYear - 1 : oldYear
-    console.log(newMonthIndex, newYear)
 
     this.setState({
       selectedMonthIndex: newMonthIndex,
@@ -359,7 +379,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   render () {
     return (
       <div className={getClassFor({ key: 'pickerWrapper', theme: this.theme, defaultClass: pickerWrapper })}
-           ref={node => this.node = node}
+           ref={this.node}
       >
         {React.cloneElement(
           this.props.children, {
