@@ -8,7 +8,7 @@ import FooterMenu from './FooterMenu/FooterMenu'
 import { IMonthObject, IYearObject, Props, State } from './interfaces'
 import { pickingOptions } from './enums'
 import { monthNames } from './consts'
-import { generateCalendar, getClassFor, getFirstMondayIndex, selectDate, unselectDate } from './functions'
+import { asembleDate, generateCalendar, getClassFor, getFirstMondayIndex, selectDate, unselectDate } from './functions'
 import { pickerWrapper, picker } from './MiquidoDatePicker.classname'
 import { defaultTheme } from '../themes/default/default_theme'
 import { CSSTransition } from 'react-transition-group'
@@ -177,20 +177,20 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    *
    */
   saveSelection (singleIndex?: number) {
+    const days = this.state.daysArray
+    let value = ''
+    const start = this.state.selectionStart
+    const month = this.state.selectedMonthIndex
+    const year = this.state.selectedYear
+
     if ((!singleIndex && singleIndex !== 0) || !Number.isInteger(singleIndex)) {
-      if (!this.state.selectionStart || !this.state.selectionEnd) return
-      const days = this.state.daysArray
-      const value = `${days[this.state.selectionStart].displayValue} - ${days[this.state.selectionEnd].displayValue}`
-        + `/${this.state.selectedMonthIndex + 1}/${this.state.selectedYear}`
-      this.setState({ inputVal: value })
-      this.closePicker()
+      if ((!start && start !== 0) || !this.state.selectionEnd) return
+      value = asembleDate(start, this.state.selectionEnd, month, year, days)
     } else {
-      const days = this.state.daysArray
-      const value = `${days[singleIndex].displayValue}`
-        + `/${this.state.selectedMonthIndex + 1}/${this.state.selectedYear}`
-      this.setState({ inputVal: value })
-      this.closePicker()
+      value = asembleDate(singleIndex, singleIndex, month, year, days)
     }
+    this.setState({ inputVal: value })
+    this.closePicker()
   }
 
   /**

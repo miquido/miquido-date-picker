@@ -61,3 +61,18 @@ export const getClassFor = (args: IGetClassObject): string => {
     return defaultClass
   }
 }
+
+export const getDisplayValue = (days: IDayObject[], index: number) => {
+  return days[index] && days[index].displayValue
+}
+
+export const asembleDate = (startDay: number, endDay: number, monthIndex: number, year: number, daysArray: IDayObject[]) => {
+  if (startDay > endDay) [startDay, endDay] = [endDay, startDay]
+
+  const monthNumberFromIndex = monthIndex + 1
+  if (startDay === endDay) {
+    return `${getDisplayValue(daysArray, startDay)}` + `/${monthNumberFromIndex}/${year}`
+  }
+  return `${getDisplayValue(daysArray, startDay)} - ${getDisplayValue(daysArray, endDay)}`
+    + `/${monthNumberFromIndex}/${year}`
+}

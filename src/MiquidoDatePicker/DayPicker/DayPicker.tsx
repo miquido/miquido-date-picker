@@ -8,11 +8,16 @@ import { getClassFor } from '../functions'
 const PickDay = (props: IPickDayProps) => {
   const previousMonthDays = []
   const nextMonthDays = []
-  const daysInMonth = new Date(props.selectedYear, props.selectedMonthIndex, 0).getDate()
+  // const daysInMonth = new Date(props.selectedYear, props.selectedMonthIndex, 0).getDate()
 
-  for (let i = 1; i <= props.pastDaysAmount; i++) {
+  const daysInPrevMonth = props.selectedMonthIndex === 0 ?
+    new Date(props.selectedYear - 1, 11, 0).getDate()
+    :
+    new Date(props.selectedYear, props.selectedMonthIndex - 1, 0).getDate()
+
+  for (let i = 0; i < props.pastDaysAmount; i++) {
     previousMonthDays.push(<Day key={`previous-${i}`}
-                                displayValue={(daysInMonth - (2 - i)).toString()}
+                                displayValue={(daysInPrevMonth - i).toString()}
                                 itemIndex={i * -1}
                                 disabled={true}
                                 theme={props.theme}
@@ -41,7 +46,7 @@ const PickDay = (props: IPickDayProps) => {
                               theme={props.theme}/>)
     }
   }
-  const daysGrid = previousMonthDays.concat(currentMonthDays, nextMonthDays)
+  const daysGrid = previousMonthDays.reverse().concat(currentMonthDays, nextMonthDays)
 
   return (
     <div className={getClassFor({ key: 'dayPicker', theme: props.theme, defaultClass: pickerDate })}>
