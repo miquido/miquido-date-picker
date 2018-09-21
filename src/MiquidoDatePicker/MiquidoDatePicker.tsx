@@ -96,7 +96,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
           return unselectDate(day)
         }
       })
-
       this.setState({ daysArray: newSelection })
     }
   }

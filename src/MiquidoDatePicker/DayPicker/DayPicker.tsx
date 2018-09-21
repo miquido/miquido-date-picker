@@ -9,12 +9,12 @@ const PickDay = (props: IPickDayProps) => {
   const previousMonthDays = []
   const nextMonthDays = []
   // const daysInMonth = new Date(props.selectedYear, props.selectedMonthIndex, 0).getDate()
-
   const daysInPrevMonth = props.selectedMonthIndex === 0 ?
     new Date(props.selectedYear - 1, 11, 0).getDate()
     :
-    new Date(props.selectedYear, props.selectedMonthIndex - 1, 0).getDate()
+    new Date(props.selectedYear, props.selectedMonthIndex, 0).getDate()
 
+  console.log('pastDaysAmount', props.pastDaysAmount)
   for (let i = 0; i < props.pastDaysAmount; i++) {
     previousMonthDays.push(<Day key={`previous-${i}`}
                                 displayValue={(daysInPrevMonth - i).toString()}

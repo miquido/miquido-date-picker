@@ -30,17 +30,15 @@ export const generateCalendar = (month: number, year: number) => {
       end: false,
       itemIndex: i
     }
-    if ((i + 1) === now.getDate()) {
-      dayObj.today = true
-    }
+    console.log('now', now, now.getDate())
+    dayObj.today = (i + 1) === now.getDate()
     daysArray.push(Object.assign({}, dayObj))
   }
   return daysArray
 }
 
 export const getFirstMondayIndex = (month: number, year: number) => {
-  const firstOfAMonth = new Date(year, month, 1).getDay()
-  return firstOfAMonth - 1
+  return new Date(year, month, 0).getDay()
 }
 
 export const defaultClassNameShouldBeOverwritten = (theme: object | undefined, key: string) => {

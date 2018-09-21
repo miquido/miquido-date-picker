@@ -33,7 +33,8 @@ const dayPicker = style({
   borderRadius: '1px',
   boxSizing: 'border-box',
   width: '100%',
-  margin: '0 auto'
+  margin: '0 auto',
+  minHeight: '186px'
 })
 
 // DaysHeader
