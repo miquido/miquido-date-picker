@@ -23,6 +23,6 @@ export const itemClass = style({
   width: '35px',
   height: '35px',
   textAlign: 'center',
-  flex: '1 1 35px',
+  flex: '1 1 31px',
   lineHeight: '35px'
 })

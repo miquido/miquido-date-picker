@@ -1,8 +1,7 @@
 import { style } from 'typestyle'
 
 export const dayClass = style({
-  flex: '1 0 35px',
-  width: '35px',
+  flex: '0 0 31px',
   height: '35px',
   fontSize: '12px',
   fontWeight: 300,
@@ -10,6 +9,7 @@ export const dayClass = style({
   textAlign: 'center',
   userSelect: 'none',
   cursor: 'pointer',
+  width: '35px',
   $nest: {
     '&:hover': {
       color: '#333333',

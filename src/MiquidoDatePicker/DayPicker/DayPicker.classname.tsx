@@ -1,7 +1,6 @@
 import { style } from 'typestyle'
 
 export const pickerDate = style({
-  minWidth: '250px',
   padding: '0 15px',
   display: 'flex',
   alignContent: 'flex-start',

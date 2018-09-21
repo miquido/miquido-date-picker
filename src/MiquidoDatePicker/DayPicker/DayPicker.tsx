@@ -6,11 +6,9 @@ import { pickerDate } from './DayPicker.classname'
 import { getClassFor } from '../functions'
 
 const PickDay = (props: IPickDayProps) => {
-
   const previousMonthDays = []
   const nextMonthDays = []
-  const date = new Date()
-  const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+  const daysInMonth = new Date(props.selectedYear, props.selectedMonthIndex, 0).getDate()
 
   for (let i = 1; i <= props.pastDaysAmount; i++) {
     previousMonthDays.push(<Day key={`previous-${i}`}
@@ -20,7 +18,6 @@ const PickDay = (props: IPickDayProps) => {
                                 theme={props.theme}
     />)
   }
-
   const currentMonthDays = props.days.map((value: Iday, index: number) => (
       <Day key={`current-${index}`}
            displayValue={value.displayValue}
@@ -33,7 +30,6 @@ const PickDay = (props: IPickDayProps) => {
            theme={props.theme}/>
     )
   )
-
   if ((previousMonthDays.length + currentMonthDays.length) % 7 !== 0) {
     let i = 0
     while ((previousMonthDays.length + currentMonthDays.length + nextMonthDays.length) % 7 !== 0) {

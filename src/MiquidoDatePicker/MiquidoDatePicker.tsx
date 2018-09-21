@@ -37,7 +37,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     }
     this.theme = props.theme || defaultTheme
     this.node = React.createRef()
-    console.log('constr', this.node)
     this.singleSelection = props.singleSelection
   }
 
@@ -84,21 +83,22 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    * @param index index of a day
    */
   mouseOverHandler = (index: number) => {
-    const start = this.state.selectionStart
-    if (start === undefined || this.state.selectionEnd) return
-    const days = this.state.daysArray
-    const newSelection = days.map(day => {
-      if (day.itemIndex <= index && day.itemIndex > start) {
-        return selectDate(day)
-      } else if (day.itemIndex >= index && day.itemIndex < start) {
-        return selectDate(day)
-      } else {
-        return unselectDate(day)
-      }
-    })
+    if (!this.singleSelection) {
+      const start = this.state.selectionStart
+      if (start === undefined || this.state.selectionEnd) return
+      const days = this.state.daysArray
+      const newSelection = days.map(day => {
+        if (day.itemIndex <= index && day.itemIndex > start) {
+          return selectDate(day)
+        } else if (day.itemIndex >= index && day.itemIndex < start) {
+          return selectDate(day)
+        } else {
+          return unselectDate(day)
+        }
+      })
 
-    this.setState({ daysArray: newSelection })
-
+      this.setState({ daysArray: newSelection })
+    }
   }
 
   /**
@@ -107,7 +107,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    * @param index index of a day
    */
   clickHandler = (index: number) => {
-
     const days = this.state.daysArray
     const start = this.state.selectionStart
     if (this.singleSelection) {
@@ -178,8 +177,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    *
    */
   saveSelection (singleIndex?: number) {
-    console.log(singleIndex)
-    if (!singleIndex || !Number.isInteger(singleIndex)) {
+    if ((!singleIndex && singleIndex !== 0) || !Number.isInteger(singleIndex)) {
       if (!this.state.selectionStart || !this.state.selectionEnd) return
       const days = this.state.daysArray
       const value = `${days[this.state.selectionStart].displayValue} - ${days[this.state.selectionEnd].displayValue}`
@@ -211,6 +209,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    */
   yearClickHandler (year: number) {
     this.setState({ selectedYear: year })
+    this.initDaysCalendar(this.state.selectedMonthIndex, year)
     this.switchToMonthSelect()
 
   }
@@ -222,6 +221,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    */
   monthClickHandler (index: number) {
     this.setState({ selectedMonth: monthNames[index], selectedMonthIndex: index })
+    this.initDaysCalendar(index, this.state.selectedYear)
     this.switchToDaySelect()
   }
 
@@ -274,9 +274,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   _onMouseUp: EventListenerOrEventListenerObject = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    console.log('click', this.node)
     if (!this.node.current || !this.node.current.contains(e.target)) {
-      console.log('woot')
       this.setState({
         isPickerVisible: false
       })
@@ -436,14 +434,17 @@ class MiquidoDatePicker extends React.Component<Props, State> {
             <DaysHeader
               theme={this.theme}
             />
-            <PickDay pastDaysAmount={getFirstMondayIndex(this.state.selectedMonthIndex, this.now.getFullYear())}
+            <PickDay pastDaysAmount={getFirstMondayIndex(this.state.selectedMonthIndex, this.state.selectedYear)}
                      days={this.state.daysArray}
                      eventsHandlers={this.eventsHandlers}
                      theme={this.theme}
+                     selectedYear={this.state.selectedYear}
+                     selectedMonthIndex={this.state.selectedMonthIndex}
             />
             <FooterMenu clear={this.clearSelection.bind(this)}
                         save={this.saveSelection.bind(this)}
                         theme={this.theme}
+                        noButtons={this.singleSelection}
             />
           </div>
         </CSSTransition>

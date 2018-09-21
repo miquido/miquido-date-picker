@@ -55,7 +55,6 @@ interface IGetClassObject {
 
 export const getClassFor = (args: IGetClassObject): string => {
   const { key, theme, defaultClass } = args
-  // console.log(key)
   if (theme && defaultClassNameShouldBeOverwritten(theme, key)) {
     return theme[key]
   } else {
