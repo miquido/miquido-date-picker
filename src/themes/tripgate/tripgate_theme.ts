@@ -277,9 +277,8 @@ const selectedDay = style({
 const pickerWrapper = style({
   position: 'relative',
   display: 'inline-block',
-  fontSize: '62.5%',
-  boxSizing: 'border-box',
-  width: '450px'
+  fontSize: '17px',
+  boxSizing: 'border-box'
 })
 
 const picker = style({

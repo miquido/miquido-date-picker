@@ -4,8 +4,7 @@ export const pickerWrapper = style({
   position: 'relative',
   display: 'inline-block',
   fontSize: '12px',
-  boxSizing: 'border-box',
-  width: '250px'
+  boxSizing: 'border-box'
 })
 
 export const picker = style({

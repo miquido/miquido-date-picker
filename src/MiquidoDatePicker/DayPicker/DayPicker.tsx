@@ -13,7 +13,6 @@ const PickDay = (props: IPickDayProps) => {
     :
     new Date(props.selectedYear, props.selectedMonthIndex, 0).getDate()
 
-  console.log('pastDaysAmount', props.pastDaysAmount)
   for (let i = 0; i < props.pastDaysAmount; i++) {
     previousMonthDays.push(<Day key={`previous-${i}`}
                                 displayValue={(daysInPrevMonth - i).toString()}

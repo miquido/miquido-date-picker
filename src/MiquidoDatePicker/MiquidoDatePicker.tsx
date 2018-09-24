@@ -60,7 +60,23 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   }
 
   componentDidMount () {
+    MiquidoDatePicker.setCalendarPosition(this.node.current.getBoundingClientRect() as DOMRect)
     this.initDaysCalendar(this.currentMonth, this.now.getFullYear())
+  }
+
+  static setCalendarPosition (bcr: DOMRect) {
+    console.log(bcr.x)
+    console.log(window.innerWidth)
+    if (bcr.x > (window.innerWidth / 2)) {
+      console.log('more space left')
+    } else {
+      console.log('more space right')
+    }
+    if (bcr.y > (window.innerHeight / 2)) {
+      console.log('more space top')
+    } else {
+      console.log('more space bottom')
+    }
   }
 
   /**

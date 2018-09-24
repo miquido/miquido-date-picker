@@ -27,7 +27,6 @@ export const generateCalendar = (month: number, year: number) => {
       end: false,
       itemIndex: i
     }
-    console.log('now', now, now.getDate())
     dayObj.today = (i + 1) === now.getDate()
     daysArray.push(Object.assign({}, dayObj))
   }

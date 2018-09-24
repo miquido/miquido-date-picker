@@ -30,11 +30,10 @@ cssRaw(`
 `)
 
 /*
-  @TODO:change selection on input typing
-  @TODO:add prop to block picking past dates
+  @TODO: change selection on input typing
+  @TODO: add prop to block picking past dates
   @TODO: add browser edges detection
   @TODO: add prop to pick date format?
-  @TODO: callback (onSelect)
   @TODO: allow year to be changed from past
   @TODO: error handling
   @TODO: switch props for context
@@ -43,13 +42,19 @@ cssRaw(`
    singleSelection={true}
  */
 ReactDOM.render(
-  <div><MiquidoDatePicker selectCallback={(val) => console.log('new value: ' + JSON.stringify(val))}>
-    <input type='text' value={''} />
-  </MiquidoDatePicker><MiquidoDatePicker theme={tripGateTheme}>
-    <input type='text' value={''} />
-  </MiquidoDatePicker><MiquidoDatePicker singleSelection={true}>
-    <input type='text' value={''} />
-  </MiquidoDatePicker></div>,
+  <>
+    <MiquidoDatePicker selectCallback={(val) => console.log('new value: ' + JSON.stringify(val))}>
+      <input type='text' value={''}/>
+    </MiquidoDatePicker>
+    <div style={{ position: 'absolute', top: '70vh', right: 0 }}>
+      <MiquidoDatePicker theme={tripGateTheme}>
+        <input type='text' value={''}/>
+      </MiquidoDatePicker>
+    </div>
+    <MiquidoDatePicker singleSelection={true}>
+      <input type='text' value={''}/>
+    </MiquidoDatePicker>
+  </>,
   document.getElementById('root') as HTMLElement
 )
 
