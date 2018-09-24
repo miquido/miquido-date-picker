@@ -1,10 +1,7 @@
 import { IDayObject } from './interfaces'
 
-export const selectDate = (day: IDayObject) => {
-  const selectedObj = day
-  selectedObj.selected = true
-  return selectedObj
-}
+export const selectDate = (day: IDayObject) => ({ ...day, selected: true })
+
 export const unselectDate = (day: IDayObject) => {
   const selectedObj = day
   selectedObj.selected = false

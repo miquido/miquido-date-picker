@@ -18,7 +18,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   currentMonth = this.now.getMonth()
   theme = {}
   private node: any
-  private singleSelection: boolean | undefined
 
   constructor (props: Props) {
     super(props)
@@ -37,7 +36,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     }
     this.theme = props.theme || defaultTheme
     this.node = React.createRef()
-    this.singleSelection = props.singleSelection
+
   }
 
   /**
@@ -83,7 +82,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    * @param index index of a day
    */
   mouseOverHandler = (index: number) => {
-    if (!this.singleSelection) {
+    if (!this.props.singleSelection) {
       const start = this.state.selectionStart
       if (start === undefined || this.state.selectionEnd) return
       const days = this.state.daysArray
@@ -106,36 +105,74 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    * @param index index of a day
    */
   clickHandler = (index: number) => {
-    const days = this.state.daysArray
-    const start = this.state.selectionStart
-    if (this.singleSelection) {
-      this.clearSelection()
-      days[index].start = true
-      this.setState({ selectionStart: index, selectionEnd: index, daysArray: days })
-      this.saveSelection(index)
+    if (this.props.singleSelection) {
+      this.handleSingleSelection(index)
     } else {
-      if (start !== undefined && !this.state.selectionEnd) {
-        const newSelection = days.map((day) => {
-          if (day.itemIndex <= index && day.itemIndex > start) {
-            return selectDate(day)
-          } else if (day.itemIndex >= index && day.itemIndex < start) {
-            return selectDate(day)
-          } else {
-            return unselectDate(day)
-          }
-        })
-
-        this.setState({ selectionEnd: index })
-        const newDaysObjArray = [...newSelection]
-        newDaysObjArray[index].end = true
-        this.setState({ daysArray: newDaysObjArray })
-      } else {
-        this.clearSelection()
-        days[index].start = true
-        this.setState({ selectionStart: index, selectionEnd: undefined, daysArray: days })
-      }
+      this.handleMultiSelection(index)
     }
+  }
 
+  /**
+   * Supports single day selection
+   *
+   * @param index index of a day
+   */
+  handleSingleSelection (index: number) {
+    const { daysArray } = this.state
+    const newDaysObjArray = [...daysArray]
+    this.clearSelection()
+    newDaysObjArray[index].start = true
+    this.setState({ selectionStart: index, selectionEnd: index, daysArray: newDaysObjArray })
+    this.saveSelection(index)
+  }
+
+  /**
+   * Supports range selection
+   *
+   * @param index index of a day
+   */
+  handleMultiSelection (index: number) {
+    const { daysArray, selectionStart } = this.state
+    if (this.isStartSelected()) {
+      debugger
+      const newSelection = this.selectBetweenPoints(selectionStart as number, index)
+      this.setState({ selectionEnd: index, daysArray: newSelection })
+    } else {
+      this.clearSelection()
+      const newDaysObjArray = [...daysArray]
+      newDaysObjArray[index].start = true
+      this.setState({ selectionStart: index, selectionEnd: undefined, daysArray: newDaysObjArray })
+    }
+  }
+
+  /**
+   * Select between two given points
+   *
+   * @param start index of a day
+   * @param end index of a day
+   */
+  selectBetweenPoints (start: number, end: number) {
+    const { daysArray } = this.state
+    return daysArray.map((day) => {
+      if (day.itemIndex <= end && day.itemIndex > start) {
+        if (day.itemIndex === end) {
+          day.end = true
+        }
+        return selectDate(day)
+      } else if (day.itemIndex >= end && day.itemIndex < start) {
+        return selectDate(day)
+      } else {
+        return unselectDate(day)
+      }
+    })
+  }
+
+  /**
+   * Condition check if selection began
+   *
+   */
+  isStartSelected () {
+    return this.state.selectionStart !== undefined && !this.state.selectionEnd
   }
 
   /**
@@ -443,7 +480,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
             <FooterMenu clear={this.clearSelection.bind(this)}
                         save={this.saveSelection.bind(this)}
                         theme={this.theme}
-                        noButtons={this.singleSelection}
+                        noButtons={this.props.singleSelection}
             />
           </div>
         </CSSTransition>

@@ -3,7 +3,7 @@ import { style } from 'typestyle'
 export const pickerWrapper = style({
   position: 'relative',
   display: 'inline-block',
-  fontSize: '62.5%',
+  fontSize: '17px',
   boxSizing: 'border-box',
   width: '250px'
 })
