@@ -1,7 +1,7 @@
 import { style } from 'typestyle'
 
 export const dayClass = style({
-  flex: '0 0 31px',
+  flex: '0 0 35px',
   height: '35px',
   fontSize: '12px',
   fontWeight: 300,

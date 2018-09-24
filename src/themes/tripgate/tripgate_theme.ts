@@ -283,8 +283,9 @@ const pickerWrapper = style({
 })
 
 const picker = style({
-  position: 'relative',
-  backgroundColor: '#ffffff'
+  position: 'absolute',
+  backgroundColor: '#ffffff',
+  minWidth: '450px'
 })
 
 const disabled = style({

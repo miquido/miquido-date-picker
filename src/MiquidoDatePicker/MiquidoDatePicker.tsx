@@ -134,7 +134,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   handleMultiSelection (index: number) {
     const { daysArray, selectionStart } = this.state
     if (this.isStartSelected()) {
-      debugger
       const newSelection = this.selectBetweenPoints(selectionStart as number, index)
       this.setState({ selectionEnd: index, daysArray: newSelection })
     } else {

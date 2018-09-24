@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { cssRaw } from 'typestyle'
 
 import MiquidoDatePicker from './MiquidoDatePicker/MiquidoDatePicker'
-// import { tripGateTheme } from './themes/tripgate/tripgate_theme'
+import { tripGateTheme } from './themes/tripgate/tripgate_theme'
 
 cssRaw(`
 @import url('https://fonts.googleapis.com/css?family=Rubik:300,400,500,700');
@@ -45,9 +45,13 @@ cssRaw(`
    singleSelection={true}
  */
 ReactDOM.render(
-  <MiquidoDatePicker>
+  <div><MiquidoDatePicker>
     <input type='text' value={''} />
-  </MiquidoDatePicker>,
+  </MiquidoDatePicker><MiquidoDatePicker theme={tripGateTheme}>
+    <input type='text' value={''} />
+  </MiquidoDatePicker><MiquidoDatePicker singleSelection={true}>
+    <input type='text' value={''} />
+  </MiquidoDatePicker></div>,
   document.getElementById('root') as HTMLElement
 )
 
