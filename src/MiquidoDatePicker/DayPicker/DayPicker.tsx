@@ -8,7 +8,6 @@ import { getClassFor } from '../functions'
 const PickDay = (props: IPickDayProps) => {
   const previousMonthDays = []
   const nextMonthDays = []
-  // const daysInMonth = new Date(props.selectedYear, props.selectedMonthIndex, 0).getDate()
   const daysInPrevMonth = props.selectedMonthIndex === 0 ?
     new Date(props.selectedYear - 1, 11, 0).getDate()
     :

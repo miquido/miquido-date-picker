@@ -36,7 +36,6 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     }
     this.theme = props.theme || defaultTheme
     this.node = React.createRef()
-
   }
 
   /**
@@ -214,6 +213,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   saveSelection (singleIndex?: number) {
     const days = this.state.daysArray
     let value = ''
+    let valueObj = {}
     const start = this.state.selectionStart
     const month = this.state.selectedMonthIndex
     const year = this.state.selectedYear
@@ -221,11 +221,26 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     if ((!singleIndex && singleIndex !== 0) || !Number.isInteger(singleIndex)) {
       if ((!start && start !== 0) || !this.state.selectionEnd) return
       value = asembleDate(start, this.state.selectionEnd, month, year, days)
+      valueObj = {
+        start: start + 1,
+        end: this.state.selectionEnd + 1,
+        month: month + 1,
+        year
+      }
     } else {
       value = asembleDate(singleIndex, singleIndex, month, year, days)
+      valueObj = {
+        start: singleIndex + 1,
+        end: singleIndex + 1,
+        month: month + 1,
+        year
+      }
     }
     this.setState({ inputVal: value })
     this.closePicker()
+    if (this.props.selectCallback) {
+      this.props.selectCallback(valueObj)
+    }
   }
 
   /**

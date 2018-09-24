@@ -46,6 +46,7 @@ export interface Props {
   theme?: ITheme
   node?: React.RefObject<any>
   singleSelection?: boolean
+  selectCallback?: (value: object) => void
 }
 
 export interface State {

@@ -30,10 +30,8 @@ cssRaw(`
 `)
 
 /*
-  @TODO:add comments
   @TODO:change selection on input typing
   @TODO:add prop to block picking past dates
-  @TODO: add losing when user click outside
   @TODO: add browser edges detection
   @TODO: add prop to pick date format?
   @TODO: callback (onSelect)
@@ -45,7 +43,7 @@ cssRaw(`
    singleSelection={true}
  */
 ReactDOM.render(
-  <div><MiquidoDatePicker>
+  <div><MiquidoDatePicker selectCallback={(val) => console.log('new value: ' + JSON.stringify(val))}>
     <input type='text' value={''} />
   </MiquidoDatePicker><MiquidoDatePicker theme={tripGateTheme}>
     <input type='text' value={''} />
@@ -56,4 +54,4 @@ ReactDOM.render(
 )
 
 // export default from './DayPicker'
-// export DateUtils from './DateUtils'
+// export tripgate from './themes/tripgate/tripgate_theme'
