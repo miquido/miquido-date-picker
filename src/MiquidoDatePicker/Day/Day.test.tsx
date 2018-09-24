@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import * as classNames from './Day.classname'
 import Day from './Day'
 import { tripGateTheme } from '../../themes/tripgate/tripgate_theme'
 
@@ -38,32 +37,32 @@ describe('Day', () => {
   })
 
   it('should have base classname', () => {
-    expect(component.hasClass(classNames.dayClass)).toBe(true)
+    expect(component.hasClass(tripGateTheme.dayItem)).toBe(true)
   })
 
   it('should have classname for selected', () => {
-    expect(component.hasClass(classNames.selectedDayClass)).toBe(true)
-    expect(componentFalse.hasClass(classNames.selectedDayClass)).toBe(false)
+    expect(component.hasClass(tripGateTheme.selected.day)).toBe(true)
+    expect(componentFalse.hasClass(tripGateTheme.selected.day)).toBe(false)
   })
 
   it('should have classname for today', () => {
-    expect(component.hasClass(classNames.todayClass)).toBe(true)
-    expect(componentFalse.hasClass(classNames.todayClass)).toBe(false)
+    expect(component.hasClass(tripGateTheme.status.today)).toBe(true)
+    expect(componentFalse.hasClass(tripGateTheme.status.today)).toBe(false)
   })
 
   it('should have classname for selection end', () => {
-    expect(component.hasClass(classNames.selectionEndClass)).toBe(true)
-    expect(componentFalse.hasClass(classNames.selectionEndClass)).toBe(false)
+    expect(component.hasClass(tripGateTheme.status.selectionEnd)).toBe(true)
+    expect(componentFalse.hasClass(tripGateTheme.status.selectionEnd)).toBe(false)
   })
 
   it('should have classname for selection start', () => {
-    expect(component.hasClass(classNames.selectionStartClass)).toBe(true)
-    expect(componentFalse.hasClass(classNames.selectionStartClass)).toBe(false)
+    expect(component.hasClass(tripGateTheme.status.selectionStart)).toBe(true)
+    expect(componentFalse.hasClass(tripGateTheme.status.selectionStart)).toBe(false)
   })
 
   it('should have classname for disabled', () => {
-    expect(component.hasClass(classNames.disabledClass)).toBe(true)
-    expect(componentFalse.hasClass(classNames.disabledClass)).toBe(false)
+    expect(component.hasClass(tripGateTheme.status.disabled)).toBe(true)
+    expect(componentFalse.hasClass(tripGateTheme.status.disabled)).toBe(false)
   })
 
   it('should have content from props', () => {

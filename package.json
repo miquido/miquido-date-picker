@@ -34,5 +34,17 @@
   },
   "files": [
     "/lib"
-  ]
+  ],
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/path/to/dir/",
+      "!src/**/*.classname.tsx",
+      "!src/themes/**/*.{ts,tsx}",
+      "!src/MiquidoDatePicker/consts.tsx",
+      "!src/MiquidoDatePicker/enums.tsx",
+      "!src/MiquidoDatePicker/interfaces.tsx"
+    ]
+  }
 }
