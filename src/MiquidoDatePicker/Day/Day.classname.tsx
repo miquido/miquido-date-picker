@@ -19,19 +19,27 @@ export const dayClass = style({
 })
 
 export const selectionStartClass = style({
-  borderRadius: '2px',
-  backgroundColor: '#ff5b9e',
-  color: '#ffffff',
-  fontWeight: 500
+  borderRadius: '2px !important',
+  backgroundColor: '#ff5b9e !important',
+  color: '#ffffff !important',
+  fontWeight: 500,
+  $nest: {
+    '&:hover': {
+      borderRadius: '2px',
+      backgroundColor: '#ff5b9e',
+      color: '#ffffff',
+      fontWeight: 500
+    }
+  }
 })
 
 export const selectionEndClass = style({
-  borderRadius: '2px',
-  backgroundColor: '#ff5b9e',
-  color: '#ffffff',
+  borderRadius: '2px !important',
+  backgroundColor: '#ff5b9e !important',
+  color: '#ffffff !important',
   fontWeight: 500,
   $nest: {
-    '&&': {
+    '&:hover': {
       borderRadius: '2px',
       backgroundColor: '#ff5b9e',
       color: '#ffffff',

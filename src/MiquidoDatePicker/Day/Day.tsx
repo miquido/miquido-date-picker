@@ -5,17 +5,11 @@ import { getClassFor } from '../functions'
 import classNames from 'classnames'
 
 const Day = (props: Iday) => {
-  const { selected, today, start, end, disabled } = props
+  const { selected, today, start, end, disabled, displayValue } = props
   const baseClass = getClassFor({
     key: 'dayItem',
     theme: props.theme,
     defaultClass: className.dayClass
-  })
-
-  const startClass = getClassFor({
-    key: 'selectionStart',
-    theme: props.theme && props.theme.status,
-    defaultClass: className.selectionStartClass
   })
 
   const endClass = getClassFor({
@@ -43,10 +37,9 @@ const Day = (props: Iday) => {
   })
 
   const dayClassNames = classNames({
-    [startClass]: start,
-    [endClass]: end,
+    [endClass]: end || start,
     [baseClass]: true,
-    [selectedClass]: selected,
+    [selectedClass]: selected && !start && !end,
     [todayClass]: today,
     [disabledClass]: disabled
   })
@@ -59,7 +52,7 @@ const Day = (props: Iday) => {
          onClick={(_) => props.eventsHandlers && props.eventsHandlers.clickHandler(props.itemIndex)}
          onContextMenu={(_) => props.eventsHandlers && props.eventsHandlers.clickHandler(props.itemIndex)}
     >
-      {props.displayValue}
+      {displayValue}
     </div>
   )
 }
