@@ -8,7 +8,14 @@ import FooterMenu from './FooterMenu/FooterMenu'
 import { IMonthObject, IYearObject, Props, State } from './interfaces'
 import { pickingOptions } from './enums'
 import { monthNames } from './consts'
-import { asembleDate, generateCalendar, getClassFor, getFirstMondayIndex, selectDate, unselectDate } from './functions'
+import {
+  asembleDate,
+  generateCalendar,
+  getClassFor,
+  getFirstMondayIndex,
+  selectDate,
+  unselectDate
+} from './functions'
 import { pickerWrapper, picker } from './MiquidoDatePicker.classname'
 import { defaultTheme } from '../themes/default/default_theme'
 import { CSSTransition } from 'react-transition-group'
@@ -18,6 +25,9 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   currentMonth = this.now.getMonth()
   theme = {}
   private node: any
+  private positionStyles: any
+  monthsList: IMonthObject[]
+  yearsList: IYearObject[]
 
   constructor (props: Props) {
     super(props)
@@ -36,6 +46,9 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     }
     this.theme = props.theme || defaultTheme
     this.node = React.createRef()
+    this.positionStyles = {}
+    this.monthsList = this.getMonths()
+    this.yearsList = this.getYears()
   }
 
   /**
@@ -60,22 +73,20 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   }
 
   componentDidMount () {
-    MiquidoDatePicker.setCalendarPosition(this.node.current.getBoundingClientRect() as DOMRect)
+    this.setCalendarPosition(this.node.current.getBoundingClientRect() as DOMRect)
     this.initDaysCalendar(this.currentMonth, this.now.getFullYear())
   }
 
-  static setCalendarPosition (bcr: DOMRect) {
-    console.log(bcr.x)
-    console.log(window.innerWidth)
+  setCalendarPosition (bcr: DOMRect) {
     if (bcr.x > (window.innerWidth / 2)) {
-      console.log('more space left')
+      this.positionStyles.right = 0
     } else {
-      console.log('more space right')
+      this.positionStyles.left = 0
     }
     if (bcr.y > (window.innerHeight / 2)) {
-      console.log('more space top')
+      this.positionStyles.bottom = bcr.height + 'px'
     } else {
-      console.log('more space bottom')
+      this.positionStyles.top = bcr.height + 'px'
     }
   }
 
@@ -99,17 +110,9 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   mouseOverHandler = (index: number) => {
     if (!this.props.singleSelection) {
       const start = this.state.selectionStart
-      if (start === undefined || this.state.selectionEnd) return
-      const days = this.state.daysArray
-      const newSelection = days.map(day => {
-        if (day.itemIndex <= index && day.itemIndex > start) {
-          return selectDate(day)
-        } else if (day.itemIndex >= index && day.itemIndex < start) {
-          return selectDate(day)
-        } else {
-          return unselectDate(day)
-        }
-      })
+      const end = this.state.selectionEnd
+      if (start === undefined || end || end === 0) return
+      const newSelection = this.selectBetweenPoints(start, index)
       this.setState({ daysArray: newSelection })
     }
   }
@@ -149,9 +152,18 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   handleMultiSelection (index: number) {
     const { daysArray, selectionStart } = this.state
     if (this.isStartSelected()) {
-      const newSelection = this.selectBetweenPoints(selectionStart as number, index)
-      this.setState({ selectionEnd: index, daysArray: newSelection })
+      // start point is set
+      if (this.isEndSelected()) {
+        // whole range is selected - user want to select again
+        this.clearSelection()
+        this.setState({ selectionStart: index, selectionEnd: undefined })
+      } else {
+        const newSelection = this.selectBetweenPoints(selectionStart as number, index)
+        this.setState({ selectionStart: selectionStart, selectionEnd: index, daysArray: newSelection })
+      }
+
     } else {
+      // start point is NOT set
       this.clearSelection()
       const newDaysObjArray = [...daysArray]
       newDaysObjArray[index].start = true
@@ -168,10 +180,17 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   selectBetweenPoints (start: number, end: number) {
     const { daysArray } = this.state
     return daysArray.map((day) => {
-      if (day.itemIndex <= end && day.itemIndex > start) {
-        if (day.itemIndex === end) {
-          day.end = true
-        }
+
+      if (day.itemIndex === end) {
+        day.end = true
+      } else if (day.itemIndex === start) {
+        day.start = true
+      } else {
+        day.start = false
+        day.end = false
+      }
+
+      if (day.itemIndex <= end && day.itemIndex >= start) {
         return selectDate(day)
       } else if (day.itemIndex >= end && day.itemIndex < start) {
         return selectDate(day)
@@ -186,7 +205,15 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    *
    */
   isStartSelected () {
-    return this.state.selectionStart !== undefined && !this.state.selectionEnd
+    return this.state.selectionStart !== undefined
+  }
+
+  /**
+   * Condition check if selection end
+   *
+   */
+  isEndSelected () {
+    return this.state.selectionEnd !== undefined
   }
 
   /**
@@ -231,15 +258,16 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     let value = ''
     let valueObj = {}
     const start = this.state.selectionStart
+    const end = this.state.selectionEnd
     const month = this.state.selectedMonthIndex
     const year = this.state.selectedYear
 
     if ((!singleIndex && singleIndex !== 0) || !Number.isInteger(singleIndex)) {
-      if ((!start && start !== 0) || !this.state.selectionEnd) return
-      value = asembleDate(start, this.state.selectionEnd, month, year, days)
+      if ((!start && start !== 0) || (!end && end !== 0)) return
+      value = asembleDate(start, end, month, year, days)
       valueObj = {
         start: start + 1,
-        end: this.state.selectionEnd + 1,
+        end: end + 1,
         month: month + 1,
         year
       }
@@ -463,7 +491,8 @@ class MiquidoDatePicker extends React.Component<Props, State> {
             })
           }}
         >
-          <div className={getClassFor({ key: 'picker', theme: this.theme, defaultClass: picker })}>
+          <div className={getClassFor({ key: 'picker', theme: this.theme, defaultClass: picker })}
+               style={this.positionStyles}>
             <HeaderMenu displayYear={this.state.selectedYear}
                         displayMonth={this.state.selectedMonth}
                         switchToYearSelect={this.switchToYearSelect.bind(this)}
@@ -483,7 +512,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
                 })
               }}
             >
-              <YearPicker years={this.getYears()}
+              <YearPicker years={this.yearsList}
                           theme={this.theme}
               />
             </CSSTransition>
@@ -493,7 +522,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
               classNames='picker'
               unmountOnExit
             >
-              <MonthPicker months={this.getMonths()} eventsHandlers={this.eventsHandlers}
+              <MonthPicker months={this.monthsList} eventsHandlers={this.eventsHandlers}
                            theme={this.theme}
               />
             </CSSTransition>

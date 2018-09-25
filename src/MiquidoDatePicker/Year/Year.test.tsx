@@ -22,6 +22,5 @@ describe('Year', () => {
 
   it('should render Year', () => {
     expect(component.exists()).toBe(true)
-    expect(component.exists()).toBe(true)
   })
 })

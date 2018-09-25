@@ -21,9 +21,7 @@ describe('DayPicker', () => {
   const wrapper = shallow(<DayPicker {...mock} />)
   const component = wrapper.find('div')
 
-
   it('should render DayPicker', () => {
-    expect(component.exists()).toBe(true)
     expect(component.exists()).toBe(true)
   })
 

@@ -43,9 +43,9 @@ const Day = (props: Iday) => {
   })
 
   const dayClassNames = classNames({
-    [baseClass]: true,
     [startClass]: start,
     [endClass]: end,
+    [baseClass]: true,
     [selectedClass]: selected,
     [todayClass]: today,
     [disabledClass]: disabled

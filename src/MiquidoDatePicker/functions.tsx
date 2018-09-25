@@ -27,7 +27,7 @@ export const generateCalendar = (month: number, year: number) => {
       end: false,
       itemIndex: i
     }
-    dayObj.today = (i + 1) === now.getDate()
+    dayObj.today = (i + 1) === now.getDate() && year === now.getFullYear() && month === now.getMonth()
     daysArray.push(Object.assign({}, dayObj))
   }
   return daysArray
@@ -70,3 +70,8 @@ export const asembleDate = (startDay: number, endDay: number, monthIndex: number
   return `${getDisplayValue(daysArray, startDay)} - ${getDisplayValue(daysArray, endDay)}`
     + `/${monthNumberFromIndex}/${year}`
 }
+
+// export function debugHelper (days: IDayObject[], start: number, end: number) {
+//   console.log(`STATE: start -> ${start} | end -> ${end}`)
+//   console.log(`IN ARRAY start -> ${days.findIndex(obj => obj.start)} | end -> ${days.findIndex(obj => obj.end)}`)
+// }
