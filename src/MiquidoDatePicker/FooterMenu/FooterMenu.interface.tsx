@@ -1,6 +1,6 @@
 export interface IFooterMenu {
-  clear: () => void
-  save: () => void
+  clear: (event: any) => void
+  save: (event: any) => void
   theme?: object
   noButtons?: boolean
 }

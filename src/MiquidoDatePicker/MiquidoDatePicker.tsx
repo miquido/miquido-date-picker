@@ -13,7 +13,7 @@ import {
   generateCalendar,
   getClassFor,
   getFirstMondayIndex,
-  selectDate,
+  selectDate, setRawStyles,
   unselectDate
 } from './functions'
 import { pickerWrapper, picker } from './MiquidoDatePicker.classname'
@@ -65,7 +65,8 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   }
 
   componentWillMount () {
-    document.addEventListener('mousedown', this._onMouseUp, false)
+    setRawStyles()
+    // document.addEventListener('mousedown', this._onMouseUp, false)
   }
 
   componentWillUnmount () {
@@ -78,6 +79,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   }
 
   setCalendarPosition (bcr: DOMRect) {
+    this.positionStyles = {}
     if (bcr.x > (window.innerWidth / 2)) {
       this.positionStyles.right = 0
     } else {
@@ -381,7 +383,9 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    *
    */
   private showPicker () {
+    this.setCalendarPosition(this.node.current.getBoundingClientRect() as DOMRect)
     this.setState({ isPickerVisible: true })
+    // document.addEventListener('mousedown', this._onMouseUp, false)
   }
 
   /**
@@ -390,6 +394,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    */
   private closePicker () {
     this.setState({ isPickerVisible: false })
+    document.removeEventListener('mousedown', this._onMouseUp, false)
   }
 
   /**

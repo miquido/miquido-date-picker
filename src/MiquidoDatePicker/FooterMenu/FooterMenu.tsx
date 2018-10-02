@@ -9,11 +9,11 @@ const FooterMenu = (props: IFooterMenu) => {
   return (
     <div className={getClassFor({ key: 'footerWrapper', theme: theme, defaultClass: footerWrapper })}>
       {!(props.noButtons) &&
-      <a href='#' className={getClassFor({ key: 'clearBtn', theme: theme, defaultClass: clearBtn })} onClick={clear}>Clear
-        dates</a>}
+      <p className={getClassFor({ key: 'clearBtn', theme: theme, defaultClass: clearBtn })} onClick={event => clear(event)}>Clear
+        dates</p>}
       {!(props.noButtons) &&
-      < a href='#' className={getClassFor({ key: 'saveBtn', theme: theme, defaultClass: saveBtn })}
-          onClick={save}>Apply</a>}
+      <p className={getClassFor({ key: 'saveBtn', theme: theme, defaultClass: saveBtn })}
+          onClick={event => save(event)}>Apply</p>}
     </div>
   )
 }

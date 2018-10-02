@@ -9,5 +9,6 @@ export const pickerWrapper = style({
 
 export const picker = style({
   position: 'absolute',
-  backgroundColor: '#ffffff'
+  backgroundColor: '#ffffff',
+  zIndex: 500
 })

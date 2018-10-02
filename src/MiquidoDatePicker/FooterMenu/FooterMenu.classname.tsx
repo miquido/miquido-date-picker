@@ -25,7 +25,8 @@ export const clearBtn = style({
   lineHeight: 'normal',
   letterSpacing: 'normal',
   color: '#c4c5ca',
-  textDecoration: 'none'
+  textDecoration: 'none',
+  cursor: 'pointer'
 })
 
 export const saveBtn = style({
@@ -36,5 +37,6 @@ export const saveBtn = style({
   lineHeight: 'normal',
   letterSpacing: 'normal',
   color: '#333333',
-  textDecoration: 'none'
+  textDecoration: 'none',
+  cursor: 'pointer'
 })

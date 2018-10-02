@@ -1,4 +1,5 @@
 import { IDayObject } from './interfaces'
+import { cssRaw } from 'typestyle'
 
 export const selectDate = (day: IDayObject) => ({ ...day, selected: true })
 
@@ -65,13 +66,31 @@ export const asembleDate = (startDay: number, endDay: number, monthIndex: number
 
   const monthNumberFromIndex = monthIndex + 1
   if (startDay === endDay) {
-    return `${getDisplayValue(daysArray, startDay)}` + `/${monthNumberFromIndex}/${year}`
+    return `${year}/${monthNumberFromIndex}/${getDisplayValue(daysArray, startDay)}`
   }
   return `${getDisplayValue(daysArray, startDay)} - ${getDisplayValue(daysArray, endDay)}`
     + `/${monthNumberFromIndex}/${year}`
 }
 
-// export function debugHelper (days: IDayObject[], start: number, end: number) {
-//   console.log(`STATE: start -> ${start} | end -> ${end}`)
-//   console.log(`IN ARRAY start -> ${days.findIndex(obj => obj.start)} | end -> ${days.findIndex(obj => obj.end)}`)
-// }
+export const setRawStyles = () => {
+  return cssRaw(`
+.picker-enter {
+  opacity: 0.01;
+  transform: scale(0.9) translateY(50%);
+}
+.picker-enter-active {
+  opacity: 1;
+  transform: scale(1) translateY(0%);
+  transition: all 300ms ease-out;
+}
+.picker-exit {
+  opacity: 1;
+  transform: scale(1) translateY(0%);
+}
+.picker-exit-active {
+  opacity: 0.01;
+  transform: scale(0.9) translateY(50%);
+  transition: all 300ms ease-out;
+}
+`)
+}

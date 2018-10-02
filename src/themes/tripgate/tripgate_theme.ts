@@ -95,7 +95,8 @@ const clearBtn = style({
   lineHeight: 'normal',
   letterSpacing: 'normal',
   color: '#c4c5ca',
-  textDecoration: 'none'
+  textDecoration: 'none',
+  cursor: 'pointer'
 })
 
 const saveBtn = style({
@@ -106,7 +107,8 @@ const saveBtn = style({
   lineHeight: 'normal',
   letterSpacing: 'normal',
   color: '#333333',
-  textDecoration: 'none'
+  textDecoration: 'none',
+  cursor: 'pointer'
 })
 
 // HeaderMenu
@@ -284,7 +286,8 @@ const pickerWrapper = style({
 const picker = style({
   position: 'absolute',
   backgroundColor: '#ffffff',
-  minWidth: '450px'
+  minWidth: '450px',
+  zIndex: 500
 })
 
 const disabled = style({
