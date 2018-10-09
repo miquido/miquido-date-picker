@@ -133,6 +133,15 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   }
 
   /**
+   * Supports click outside picker
+   */
+  clickOutsideHandler: EventListenerOrEventListenerObject = (e) => {
+    if (!this.node.current || !this.node.current.contains(e.target)) {
+      this.closePicker()
+    }
+  }
+
+  /**
    * Supports single day selection
    *
    * @param index index of a day
@@ -371,9 +380,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
     e.preventDefault()
     e.stopPropagation()
     if (!this.node.current || !this.node.current.contains(e.target)) {
-      this.setState({
-        isPickerVisible: false
-      })
+      this.closePicker()
     }
 
   }
@@ -385,7 +392,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
   private showPicker () {
     this.setCalendarPosition(this.node.current.getBoundingClientRect() as DOMRect)
     this.setState({ isPickerVisible: true })
-    // document.addEventListener('mousedown', this._onMouseUp, false)
+    document.addEventListener('mousedown', this.clickOutsideHandler, false)
   }
 
   /**
@@ -394,7 +401,7 @@ class MiquidoDatePicker extends React.Component<Props, State> {
    */
   private closePicker () {
     this.setState({ isPickerVisible: false })
-    document.removeEventListener('mousedown', this._onMouseUp, false)
+    document.removeEventListener('mousedown', this.clickOutsideHandler, false)
   }
 
   /**
