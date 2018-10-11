@@ -9,16 +9,16 @@ const HeaderMenu = (props: IHeaderMenu) => {
   return (
     <div className={getClassFor({ key: 'headerMenu', theme: props.theme, defaultClass: wrapperClass })}>
       <div className={getClassFor({ key: 'prevMonthBtn', theme: props.theme, defaultClass: prevMonth })}
-           onClick={props.prevMonth}><FontAwesomeIcon icon='arrow-left'/></div>
+           onClick={props.prevMonth}><FontAwesomeIcon icon='arrow-left' size='sm'/></div>
       <div className={getClassFor({ key: 'monthSelectBtn', theme: props.theme, defaultClass: monthSelectPicker })}>
         <span onClick={props.switchToMonthSelect}>{props.displayMonth}</span>
         &nbsp;
         <span onClick={props.switchToYearSelect}>{props.displayYear}</span>
         &nbsp;
-        <FontAwesomeIcon icon='caret-down'/>
+        <FontAwesomeIcon icon='caret-down' size='sm'/>
       </div>
       <div className={getClassFor({ key: 'nextMonthBtn', theme: props.theme, defaultClass: nextMonth })}
-           onClick={props.nextMonth}><FontAwesomeIcon icon='arrow-right'/></div>
+           onClick={props.nextMonth}><FontAwesomeIcon icon='arrow-right' size='sm'/></div>
     </div>
   )
 }
