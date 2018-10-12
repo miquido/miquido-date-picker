@@ -1,43 +1,24 @@
-import { style } from 'typestyle'
 import * as React from 'react'
 import Month from '../Month/Month'
-import { IMonthObject } from '../index'
-
-interface IMonthPicker {
-  months: IMonthObject[]
-  selected?: boolean
-  eventsHandlers?: object
-}
+import { IMonthObject } from '../interfaces'
+import { pickerDate } from './MonthPicker.classname'
+import { IMonthPicker } from './MonthPicker.interface'
+import { getClassFor } from '../functions'
 
 const PickMonth = (props: IMonthPicker) => {
-  const pickerDate = style({
-    minWidth: '250px',
-    padding: '0 15px',
-    maxWidth: (35 * 7) + 'px',
-    display: 'flex',
-    alignContent: 'space-between',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    fontFamily: 'Rubik, sans-serif',
-    backgroundColor: '#ffffff',
-    borderRadius: '1px',
-    boxSizing: 'border-box',
-    position: 'absolute',
-    top: '50px',
-    left: 0,
-    minHeight: '245px'
-  })
 
   const monthsGrid = props.months.map((month: IMonthObject, index: number) => (
       <Month key={index}
              itemIndex={month.itemIndex}
              displayValue={month.name}
              selected={month.selected}
-             eventsHandlers={month.eventsHandlers}/>
+             eventsHandlers={month.eventsHandlers}
+             theme={props.theme}
+      />
     )
   )
   return (
-    <div className={pickerDate}>
+    <div className={getClassFor({ key: 'monthPicker', theme: props.theme, defaultClass: pickerDate })}>
       {monthsGrid}
     </div>
   )

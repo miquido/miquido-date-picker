@@ -1,35 +1,26 @@
-import { style } from 'typestyle'
 import * as React from 'react'
 import IPickDayProps from './DayPicker.interface'
 import { Iday } from '../Day/Day.interface'
 import Day from '../Day/Day'
+import { pickerDate } from './DayPicker.classname'
+import { getClassFor } from '../functions'
 
 const PickDay = (props: IPickDayProps) => {
-  const pickerDate = style({
-    minWidth: '250px',
-    padding: '0 15px',
-    maxWidth: (35 * 7) + 'px',
-    display: 'flex',
-    alignContent: 'flex-start',
-    flexWrap: 'wrap',
-    fontFamily: 'Rubik, sans-serif',
-    backgroundColor: '#ffffff',
-    borderRadius: '1px',
-    boxShadow: '0 17px 13px 0 #ecf5fd, 0 -2px 7px 0 rgba(236, 245, 253, 0.5)',
-    boxSizing: 'border-box',
-    width: '100%'
-  })
-
   const previousMonthDays = []
   const nextMonthDays = []
-  const date = new Date()
-  const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+  const daysInPrevMonth = props.selectedMonthIndex === 0 ?
+    new Date(props.selectedYear - 1, 11, 0).getDate()
+    :
+    new Date(props.selectedYear, props.selectedMonthIndex, 0).getDate()
 
-  for (let i = 1; i <= 2; i++) {
-    previousMonthDays.push(<Day key={`previous-${i}`} displayValue={(daysInMonth - (2 - i)).toString()} itemIndex={i * -1}
-                                disabled={true}/>)
+  for (let i = 0; i < props.pastDaysAmount; i++) {
+    previousMonthDays.push(<Day key={`previous-${i}`}
+                                displayValue={(daysInPrevMonth - i).toString()}
+                                itemIndex={(i + 1) * -1}
+                                disabled={true}
+                                theme={props.theme}
+    />)
   }
-
   const currentMonthDays = props.days.map((value: Iday, index: number) => (
       <Day key={`current-${index}`}
            displayValue={value.displayValue}
@@ -38,19 +29,25 @@ const PickDay = (props: IPickDayProps) => {
            end={value.end}
            today={value.today}
            eventsHandlers={props.eventsHandlers}
-           itemIndex={index}/>
+           itemIndex={index}
+           theme={props.theme}/>
     )
   )
-
-  for (let i = 1; i <= 3; i++) {
-    nextMonthDays.push(<Day key={`next-${i}`} displayValue={i.toString()} itemIndex={i * -1}
-                            disabled={true}/>)
+  if ((previousMonthDays.length + currentMonthDays.length) % 7 !== 0) {
+    let i = 0
+    while ((previousMonthDays.length + currentMonthDays.length + nextMonthDays.length) % 7 !== 0) {
+      i++
+      nextMonthDays.push(<Day key={`next-${i}`}
+                              displayValue={i.toString()}
+                              itemIndex={i * -1}
+                              disabled={true}
+                              theme={props.theme}/>)
+    }
   }
-
-  const daysGrid = previousMonthDays.concat(currentMonthDays, nextMonthDays)
+  const daysGrid = previousMonthDays.reverse().concat(currentMonthDays, nextMonthDays)
 
   return (
-    <div className={pickerDate}>
+    <div className={getClassFor({ key: 'dayPicker', theme: props.theme, defaultClass: pickerDate })}>
       {daysGrid}
     </div>
   )

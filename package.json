@@ -1,0 +1,63 @@
+{
+  "name": "miquido-d-p",
+  "version": "0.1.16",
+  "private": false,
+  "peerDependencies": {
+    "typestyle": "2.0.1",
+    "@fortawesome/fontawesome-svg-core": "1.2.4",
+    "@fortawesome/free-solid-svg-icons": "5.3.1",
+    "@fortawesome/react-fontawesome": "0.1.3"
+  },
+  "scripts": {
+    "tsc": "rm -rf ./lib && tsc",
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --coverage --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "1.2.4",
+    "@fortawesome/free-solid-svg-icons": "5.3.1",
+    "@fortawesome/react-fontawesome": "0.1.3",
+    "@types/classnames": "2.2.6",
+    "@types/enzyme": "3.1.13",
+    "@types/enzyme-adapter-react-16": "1.0.3",
+    "@types/jest": "23.3.1",
+    "@types/node": "10.7.1",
+    "@types/react": "16.4.11",
+    "@types/react-dom": "16.0.7",
+    "@types/react-transition-group": "2.0.14",
+    "classnames": "2.2.6",
+    "commitizen": "2.10.1",
+    "enzyme": "3.5.0",
+    "enzyme-adapter-react-16": "1.3.1",
+    "jest-cli": "23.5.0",
+    "react": "16.4.2",
+    "react-dom": "16.4.2",
+    "react-scripts-ts": "2.17.0",
+    "react-test-renderer": "16.4.2",
+    "react-transition-group": "2.4.0",
+    "tslint-config-standard": "7.1.0",
+    "typescript": "3.0.1"
+  },
+  "files": [
+    "/lib"
+  ],
+  "license": "Apache 2.0",
+  "main": "./lib/index.js",
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/path/to/dir/",
+      "!src/**/*.classname.tsx",
+      "!src/themes/**/*.{ts,tsx}",
+      "!src/MiquidoDatePicker/consts.tsx",
+      "!src/MiquidoDatePicker/enums.tsx",
+      "!src/MiquidoDatePicker/interfaces.tsx"
+    ]
+  },
+  "dependencies": {
+    "typestyle": "^2.0.1"
+  }
+}

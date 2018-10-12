@@ -1,31 +1,10 @@
-import { style } from 'typestyle'
 import * as React from 'react'
 import Year from '../Year/Year'
-import { IYearObject } from '../index'
-
-interface IYearPicker {
-  years: IYearObject[]
-}
+import { YearPickerWrapper } from './YearPicker.classname'
+import { IYearPicker } from './YearPicker.interface'
+import { getClassFor } from '../functions'
 
 const YearPicker = (props: IYearPicker) => {
-  const pickerDate = style({
-    minWidth: '250px',
-    padding: '0 15px',
-    maxWidth: (35 * 7) + 'px',
-    display: 'flex',
-    alignContent: 'space-between',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    fontFamily: 'Rubik, sans-serif',
-    backgroundColor: '#ffffff',
-    borderRadius: '1px',
-    boxSizing: 'border-box',
-    width: '100%',
-    position: 'absolute',
-    top: '50px',
-    left: 0,
-    minHeight: '285px'
-  })
 
   const years = props.years.map((year, index) => {
     return (<Year
@@ -33,10 +12,12 @@ const YearPicker = (props: IYearPicker) => {
       displayValue={year.name}
       selected={year.selected}
       itemIndex={year.itemIndex}
-      eventsHandlers={year.eventsHandlers} />)
+      eventsHandlers={year.eventsHandlers}
+      theme={props.theme}
+    />)
   })
   return (
-    <div className={pickerDate}>
+    <div className={getClassFor({ key: 'yearPicker', theme: props.theme, defaultClass: YearPickerWrapper })}>
       {years}
     </div>
   )

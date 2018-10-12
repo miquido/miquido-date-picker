@@ -1,52 +1,19 @@
-import { style } from 'typestyle'
 import * as React from 'react'
 import { IFooterMenu } from './FooterMenu.interface'
+import { footerWrapper, saveBtn, clearBtn } from './FooterMenu.classname'
+import { getClassFor } from '../functions'
 
 const FooterMenu = (props: IFooterMenu) => {
-  const { clear, save } = props
-  const menuClass = style({
-    height: '40px',
-    fontSize: '12px',
-    fontWeight: 500,
-    color: '#333333',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    justifyContent: 'space-between',
-    alignContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    borderTop: '1px solid rgba(196, 197, 202, 0.2)',
-    padding: '0 20px',
-    fontFamily: 'Rubik'
-  })
-
-  const btnSecondary = style({
-    fontSize: '12px',
-    fontWeight: 300,
-    fontStyle: 'normal',
-    fontStretch: 'normal',
-    lineHeight: 'normal',
-    letterSpacing: 'normal',
-    color: '#c4c5ca',
-    textDecoration: 'none'
-  })
-
-  const btnMain = style({
-    fontSize: '12px',
-    fontWeight: 500,
-    fontStyle: 'normal',
-    fontStretch: 'normal',
-    lineHeight: 'normal',
-    letterSpacing: 'normal',
-    color: '#333333',
-    textDecoration: 'none'
-  })
+  const { clear, save, theme } = props
 
   return (
-    <div className={menuClass}>
-      <a href='#' className={btnSecondary} onClick={clear}>Clear dates</a>
-      <a href='#' className={btnMain} onClick={save}>Apply</a>
+    <div className={getClassFor({ key: 'footerWrapper', theme: theme, defaultClass: footerWrapper })}>
+      {!(props.noButtons) &&
+      <p className={getClassFor({ key: 'clearBtn', theme: theme, defaultClass: clearBtn })} onClick={event => clear(event)}>Clear
+        dates</p>}
+      {!(props.noButtons) &&
+      <p className={getClassFor({ key: 'saveBtn', theme: theme, defaultClass: saveBtn })}
+          onClick={event => save(event)}>Apply</p>}
     </div>
   )
 }

@@ -1,55 +1,24 @@
-import { style } from 'typestyle'
 import * as React from 'react'
-
-interface IHeaderMenu {
-  displayMonth: string,
-  displayYear: number,
-  switchToYearSelect: () => void,
-  switchToMonthSelect: () => void
-  nextMonth: () => void
-  prevMonth: () => void
-}
+import { monthSelectPicker, nextMonth, prevMonth, wrapperClass } from './HeaderMenu.classname'
+import { getClassFor } from '../functions'
+import { IHeaderMenu } from './HeaderMenu.interface'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const HeaderMenu = (props: IHeaderMenu) => {
-  const wrapperClass = style({
-    height: '50px',
-    fontFamily: 'Rubik',
-    fontSize: '1.4em',
-    fontWeight: 500,
-    letterSpacing: '0.5px',
-    textAlign: 'center',
-    color: '#444791',
-    borderBottom: '1px solid rgba(196, 197, 202, 0.2)',
-    backgroundColor: '#ffffff',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    justifyContent: 'space-between',
-    alignContent: 'space-between',
-    alignItems: 'center',
-    padding: '0 20px',
-    boxSizing: 'border-box',
-    width: '100%'
-  })
 
-  const prevMonth = style({
-    cursor: 'pointer'
-  })
-  const monthSelectPicker = style({
-    cursor: 'pointer'
-  })
-  const nextMonth = style({
-    cursor: 'pointer'
-  })
   return (
-    <div className={wrapperClass}>
-      <div className={prevMonth} onClick={props.prevMonth}>&lt;</div>
-      <div className={monthSelectPicker}>
+    <div className={getClassFor({ key: 'headerMenu', theme: props.theme, defaultClass: wrapperClass })}>
+      <div className={getClassFor({ key: 'prevMonthBtn', theme: props.theme, defaultClass: prevMonth })}
+           onClick={props.prevMonth}><FontAwesomeIcon icon='arrow-left' size='sm'/></div>
+      <div className={getClassFor({ key: 'monthSelectBtn', theme: props.theme, defaultClass: monthSelectPicker })}>
         <span onClick={props.switchToMonthSelect}>{props.displayMonth}</span>
         &nbsp;
         <span onClick={props.switchToYearSelect}>{props.displayYear}</span>
+        &nbsp;
+        <FontAwesomeIcon icon='caret-down' size='sm'/>
       </div>
-      <div className={nextMonth} onClick={props.nextMonth}>&gt;</div>
+      <div className={getClassFor({ key: 'nextMonthBtn', theme: props.theme, defaultClass: nextMonth })}
+           onClick={props.nextMonth}><FontAwesomeIcon icon='arrow-right' size='sm'/></div>
     </div>
   )
 }
