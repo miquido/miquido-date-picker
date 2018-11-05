@@ -75,4 +75,5 @@ export interface State {
   defaultValue?: IDefaultValue | undefined
   inputValue?: string | undefined
   userSelectedDaysBefore: boolean
+  yearsList: IYearObject[]
 }
