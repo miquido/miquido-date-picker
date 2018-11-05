@@ -61,7 +61,7 @@ export const getDisplayValue = (days: IDayObject[], index: number) => {
   return days[index] && days[index].displayValue
 }
 
-export const asembleDate = (startDay: number, endDay: number, monthIndex: number, year: number, daysArray: IDayObject[]) => {
+export const assembleDate = (startDay: number, endDay: number, monthIndex: number, year: number, daysArray: IDayObject[]) => {
   if (startDay > endDay) [startDay, endDay] = [endDay, startDay]
 
   const monthNumberFromIndex = monthIndex + 1

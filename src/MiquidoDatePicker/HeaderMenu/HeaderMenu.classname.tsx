@@ -40,3 +40,13 @@ export const monthSelectPicker = style({
 export const nextMonth = style({
   cursor: 'pointer'
 })
+
+export const headerDisplayedYear = style({
+  margin: '0 5px'
+})
+export const headerDisplayedMonth = style({
+  margin: '0 5px'
+})
+export const headerDisplayedIcon = style({
+  margin: '0 5px'
+})

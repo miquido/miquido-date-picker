@@ -41,12 +41,25 @@ export interface IYearObject {
   eventsHandlers: { clickHandler: (index: number) => void }
 }
 
+export interface IDefaultValue {
+  start: number
+  end: number
+  month: number
+  year: number
+}
+
 export interface Props {
   children: React.ReactElement<any>
   theme?: ITheme
   node?: React.RefObject<any>
   singleSelection?: boolean
   selectCallback?: (value: object) => void
+  defaultValue?: IDefaultValue | undefined
+  beforeHeader?: React.ReactNode
+  beforeDayNamesRow?: React.ReactNode
+  beforeBody?: React.ReactNode
+  beforeFooter?: React.ReactNode
+  beforeEnd?: React.ReactNode
 }
 
 export interface State {
@@ -55,9 +68,11 @@ export interface State {
   selectionEnd: number | undefined
   selectMethod: selectMethods | undefined
   currentlyPicking: pickingOptions
-  daysArray: IDayObject[],
-  selectedMonth: string,
-  selectedMonthIndex: number,
-  selectedYear: number,
-  inputVal: string | undefined
+  daysArray: IDayObject[]
+  selectedMonth: string
+  selectedMonthIndex: number
+  selectedYear: number
+  defaultValue?: IDefaultValue | undefined
+  inputValue?: string | undefined
+  userSelectedDaysBefore: boolean
 }

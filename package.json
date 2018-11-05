@@ -13,7 +13,8 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --coverage --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "commit": "npx git-cz"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.4",
@@ -58,6 +59,6 @@
     ]
   },
   "dependencies": {
-    "typestyle": "^2.0.1"
+    "typestyle": "2.0.1"
   }
 }
