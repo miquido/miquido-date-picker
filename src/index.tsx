@@ -58,9 +58,7 @@ ReactDOM.render(
       </MiquidoDatePicker>
     </div>
     <div style={{ position: 'absolute', top: '5vh', right: 0 }}>
-      <MiquidoDatePicker theme={tripGateTheme}>
-        <input type='text' value={''}/>
-      </MiquidoDatePicker>
+      <MiquidoDatePicker theme={tripGateTheme} />
     </div>
     <MiquidoDatePicker singleSelection={true}>
       <input type='text' value={''}/>

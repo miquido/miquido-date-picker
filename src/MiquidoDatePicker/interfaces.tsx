@@ -49,7 +49,7 @@ export interface IDefaultValue {
 }
 
 export interface Props {
-  children: React.ReactElement<any>
+  children?: React.ReactElement<any>
   theme?: ITheme
   node?: React.RefObject<any>
   singleSelection?: boolean
