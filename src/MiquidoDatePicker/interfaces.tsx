@@ -24,6 +24,7 @@ export interface IDayObject {
   start: boolean
   end: boolean
   itemIndex: number
+  date: Date
 }
 
 export interface IMonthObject {
@@ -42,10 +43,14 @@ export interface IYearObject {
 }
 
 export interface IDefaultValue {
-  start: number
-  end: number
-  month: number
-  year: number
+  start: Date
+  end?: Date
+  display: Date
+}
+
+export interface IRestrictions {
+  min?: Date
+  max?: Date
 }
 
 export interface Props {
@@ -53,13 +58,21 @@ export interface Props {
   theme?: ITheme
   node?: React.RefObject<any>
   singleSelection?: boolean
-  selectCallback?: (value: object) => void
+  onSelect?: (value: object) => void
   defaultValue?: IDefaultValue | undefined
   beforeHeader?: React.ReactNode
   beforeDayNamesRow?: React.ReactNode
   beforeBody?: React.ReactNode
   beforeFooter?: React.ReactNode
   beforeEnd?: React.ReactNode
+  restrictions?: IRestrictions
+  inputClass?: string
+  disabled?: boolean
+  placeholder?: string
+  showOnlyStart?: boolean
+  showOnlyEnd?: boolean
+  open?: boolean
+  name?: string
 }
 
 export interface State {
@@ -69,11 +82,26 @@ export interface State {
   selectMethod: selectMethods | undefined
   currentlyPicking: pickingOptions
   daysArray: IDayObject[]
-  selectedMonth: string
-  selectedMonthIndex: number
-  selectedYear: number
+  displayedMonth: string
+  displayedMonthIndex: number
+  displayedYear: number
   defaultValue?: IDefaultValue | undefined
   inputValue?: string | undefined
   userSelectedDaysBefore: boolean
   yearsList: IYearObject[]
+  selectedDate: ISelectedDate
+  disabled?: boolean | undefined
+}
+
+export interface ISelectionCheck {
+  selectedStart: Date
+  selectedEnd?: Date
+  currentView: Date
+}
+
+// extends IDefaultValue ?
+export interface ISelectedDate {
+  start: Date | null
+  end?: Date | null
+  display: Date | null
 }

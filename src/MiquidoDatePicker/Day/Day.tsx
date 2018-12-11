@@ -46,11 +46,11 @@ const Day = (props: Iday) => {
 
   return (
     <div className={dayClassNames}
-         onMouseOver={(_) => props.eventsHandlers && props.eventsHandlers.mouseOverHandler(props.itemIndex)}
-         onMouseDown={(_) => props.eventsHandlers && props.eventsHandlers.mouseDownHandler(props.itemIndex)}
-         onMouseUp={(_) => props.eventsHandlers && props.eventsHandlers.mouseUpHandler(props.itemIndex)}
-         onClick={(_) => props.eventsHandlers && props.eventsHandlers.clickHandler(props.itemIndex)}
-         onContextMenu={(_) => props.eventsHandlers && props.eventsHandlers.clickHandler(props.itemIndex)}
+         onMouseOver={(_) => !props.disabled && props.eventsHandlers && props.eventsHandlers.mouseOverHandler(props.itemIndex)}
+         onMouseDown={(_) => !props.disabled && props.eventsHandlers && props.eventsHandlers.mouseDownHandler(props.itemIndex)}
+         onMouseUp={(_) => !props.disabled && props.eventsHandlers && props.eventsHandlers.mouseUpHandler(props.itemIndex)}
+         onClick={(_) => !props.disabled && props.eventsHandlers && props.eventsHandlers.clickHandler(props.itemIndex)}
+         onContextMenu={(_) => !props.disabled && props.eventsHandlers && props.eventsHandlers.clickHandler(props.itemIndex)}
     >
       {displayValue}
     </div>

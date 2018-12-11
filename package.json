@@ -1,6 +1,6 @@
 {
   "name": "miquido-d-p",
-  "version": "0.2.2",
+  "version": "0.3.3",
   "private": false,
   "peerDependencies": {
     "typestyle": "2.0.1",
@@ -13,6 +13,7 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --coverage --env=jsdom",
+    "watchtest": "react-scripts-ts test --coverage --env=jsdom --watch",
     "eject": "react-scripts-ts eject",
     "commit": "npx git-cz"
   },
@@ -50,8 +51,10 @@
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!<rootDir>/node_modules/",
-      "!<rootDir>/path/to/dir/",
       "!src/**/*.classname.tsx",
+      "!src/index.tsx",
+      "!src/npm_index.tsx",
+      "!src/test_index.tsx",
       "!src/themes/**/*.{ts,tsx}",
       "!src/MiquidoDatePicker/consts.tsx",
       "!src/MiquidoDatePicker/enums.tsx",
@@ -59,6 +62,9 @@
     ]
   },
   "dependencies": {
-    "typestyle": "2.0.1"
+    "typestyle": "2.0.1",
+    "@fortawesome/fontawesome-svg-core": "1.2.4",
+    "@fortawesome/free-solid-svg-icons": "5.3.1",
+    "@fortawesome/react-fontawesome": "0.1.3"
   }
 }

@@ -25,6 +25,7 @@ const PickDay = (props: IPickDayProps) => {
       <Day key={`current-${index}`}
            displayValue={value.displayValue}
            selected={value.selected}
+           disabled={value.disabled}
            start={value.start}
            end={value.end}
            today={value.today}
