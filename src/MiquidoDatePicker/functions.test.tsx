@@ -353,7 +353,7 @@ describe('functions', () => {
   })
 // ------------- getFirstMondayIndex -------------
   it('getFirstMondayIndex should return index of first monday ( duh )', () => {
-    const firstMondayIndex = 2 // first monday index for december 2018
+    const firstMondayIndex = 3 // first monday index for december 2018
     expect(getFirstMondayIndex(11, 2018)).toBe(firstMondayIndex)
   })
 

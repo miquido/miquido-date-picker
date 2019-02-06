@@ -5,7 +5,7 @@ import { ITheme } from '../themes/theme.interface'
 export interface IDaysEventsHandlers {
   mouseUpHandler: (index: number) => void
   mouseDownHandler: (index: number) => void
-  mouseOverHandler: (index: number) => void
+  mouseOverHandler?: (index: number) => void
   clickHandler: (index: number) => void
 }
 
@@ -27,6 +27,8 @@ export interface IDayObject {
   date: Date
 }
 
+// TODO + readonly wywalic name ?
+// TODO sprawdzic czy jest w ogole potrzebne
 export interface IMonthObject {
   name: string
   itemIndex: number
@@ -43,7 +45,7 @@ export interface IYearObject {
 }
 
 export interface IDefaultValue {
-  start: Date
+  start?: Date
   end?: Date
   display: Date
 }
@@ -53,11 +55,16 @@ export interface IRestrictions {
   max?: Date
 }
 
+export interface IDoubleRestrictions extends IRestrictions {
+  start?: IRestrictions
+  end?: IRestrictions
+}
+
 export interface Props {
   children?: React.ReactElement<any>
   theme?: ITheme
   node?: React.RefObject<any>
-  singleSelection?: boolean
+  type?: string
   onSelect?: (value: object) => void
   defaultValue?: IDefaultValue | undefined
   beforeHeader?: React.ReactNode
@@ -65,14 +72,16 @@ export interface Props {
   beforeBody?: React.ReactNode
   beforeFooter?: React.ReactNode
   beforeEnd?: React.ReactNode
-  restrictions?: IRestrictions
+  restrictions?: IDoubleRestrictions
   inputClass?: string
   disabled?: boolean
   placeholder?: string
   showOnlyStart?: boolean
   showOnlyEnd?: boolean
   open?: boolean
+  close?: boolean
   name?: string
+  onClick?: () => void
 }
 
 export interface State {
@@ -93,6 +102,21 @@ export interface State {
   disabled?: boolean | undefined
 }
 
+export interface SingleSelectionState {
+  isPickerVisible: boolean
+  currentlyPicking: pickingOptions
+  displayedMonthIndex: number
+  displayedYear: number
+  defaultValue?: IDefaultValue | undefined
+  inputValue?: string | undefined
+  userSelectedDaysBefore: boolean
+  yearsList: IYearObject[]
+  selectedDate: ISelectedDate
+  disabled?: boolean | undefined
+  type?: string
+  userForcedClose: boolean
+}
+
 export interface ISelectionCheck {
   selectedStart: Date
   selectedEnd?: Date
@@ -101,7 +125,15 @@ export interface ISelectionCheck {
 
 // extends IDefaultValue ?
 export interface ISelectedDate {
-  start: Date | null
+  start?: Date | null
   end?: Date | null
   display: Date | null
+}
+
+export interface ISelectionObject {
+  day?: number
+  month?: number
+  year?: number
+  dateString?: string
+  date?: Date
 }

@@ -139,11 +139,13 @@ const prevMonthBtn = style({
   position: 'absolute',
   top: '50%',
   left: '50px',
-  transform: 'translateX(-50%)'
+  transform: 'translateX(-50%)',
+  userSelect: 'none'
 })
 const monthSelectBtn = style({
   cursor: 'pointer',
   margin: '0 auto',
+  userSelect: 'none',
   $nest: {
     'img': {
       width: '15px',
@@ -157,7 +159,8 @@ const nextMonthBtn = style({
   position: 'absolute',
   top: '50%',
   right: '50px',
-  transform: 'translateX(-50%)'
+  transform: 'translateX(-50%)',
+  userSelect: 'none'
 })
 
 // Month

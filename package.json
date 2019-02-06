@@ -1,6 +1,6 @@
 {
   "name": "miquido-d-p",
-  "version": "0.3.3",
+  "version": "0.4.9",
   "private": false,
   "peerDependencies": {
     "typestyle": "2.0.1",
@@ -12,7 +12,7 @@
     "tsc": "rm -rf ./lib && tsc",
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --coverage --env=jsdom",
+    "test": "react-scripts-ts test --env=jsdom",
     "watchtest": "react-scripts-ts test --coverage --env=jsdom --watch",
     "eject": "react-scripts-ts eject",
     "commit": "npx git-cz"

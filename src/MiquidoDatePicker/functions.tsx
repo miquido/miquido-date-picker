@@ -1,4 +1,4 @@
-import { IDayObject, ISelectedDate } from './interfaces'
+import { IDayObject, IRestrictions, ISelectedDate } from './interfaces'
 import { cssRaw } from 'typestyle'
 
 export const selectDate = (day: IDayObject) => ({ ...day, selected: true })
@@ -44,7 +44,16 @@ export const getFirstMondayIndex = (monthIndex: number, year: number) => {
   while (date.getDay() !== 1) {
     date.setDate(date.getDate() + 1)
   }
-  return date.getDate() - 1
+  return date.getDate()
+}
+
+export const getDayOfTheWeek = (monthIndex: number, year: number) => {
+  const date = new Date()
+  date.setFullYear(year)
+  date.setMonth(monthIndex)
+  date.setDate(1)
+
+  return date.getDay() - 1
 }
 
 export const defaultClassNameShouldBeOverwritten = (theme: object | undefined, key: string) => {
@@ -71,7 +80,8 @@ export const getDisplayValue = (days: IDayObject[], index: number) => {
 }
 
 // @TODO is this function need or incompleate?  should it be renamed to single selection ?
-export const assembleDate = (startDay: number, endDay: number | undefined, monthIndex: number, year: number) => {
+export const assembleDate = (startDay: number | undefined, endDay: number | undefined, monthIndex: number, year: number) => {
+  if (!startDay) return ''
   if (endDay) {
     if (startDay > endDay) [startDay, endDay] = [endDay, startDay]
 
@@ -162,7 +172,8 @@ export const checkVisibleCalendarForSelection = (
   // +1 to get next month then get last day from previous by setting day to 0
   const displayedEnd = new Date(displayedYear, displayedMonthIndex + 1, 0)
 
-  return ((start as Date).getTime() >= displayedStart.getTime() && ((end as Date).getTime()) <= displayedEnd.getTime())
+  if (!start || !end) return false
+  return (start.getTime() >= displayedStart.getTime() && (end.getTime()) <= displayedEnd.getTime())
 }
 
 export const getLastDayOfAMonth = (year: number, monthIndex: number) => {
@@ -224,6 +235,62 @@ export const replaceCharInText = (position: number, text: string, replaceChar: s
     return text.substring(0, position - 1) + replaceChar + text.substring(position)
   }
   return text
+}
+
+export const checkIfDayIsNotAllowedForSelection = (restrictions: IRestrictions | undefined, checkDate: Date) => {
+  if (restrictions) {
+    if (restrictions.min && checkDate.getTime() <= restrictions.min.getTime()) return true
+    if (restrictions.max && checkDate.getTime() >= restrictions.max.getTime()) return true
+  } else {
+    return true
+  }
+  return false
+}
+
+export const objectEquals: any = (x: any, y: any) => {
+  if (x === null || x === undefined || y === null || y === undefined) {
+    return x === y
+  }
+  // after this just checking type of one would be enough
+  if (x.constructor !== y.constructor) {
+    return false
+  }
+  // if they are functions, they should exactly refer to same one (because of closures)
+  if (x instanceof Function) {
+    return x === y
+  }
+  // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
+  if (x instanceof RegExp) {
+    return x === y
+  }
+  if (x === y || x.valueOf() === y.valueOf()) {
+    return true
+  }
+  if (Array.isArray(x) && x.length !== y.length) {
+    return false
+  }
+
+  // if they are dates, they must had equal valueOf
+  if (x instanceof Date) {
+    return false
+  }
+
+  // if they are strictly equal, they both need to be object at least
+  if (!(x instanceof Object)) {
+    return false
+  }
+  if (!(y instanceof Object)) {
+    return false
+  }
+
+  // recursive object equality check
+  const p = Object.keys(x)
+  return Object.keys(y).every(function (i) {
+    return p.indexOf(i) !== -1
+  }) &&
+    p.every(function (i) {
+      return objectEquals(x[i], y[i])
+    })
 }
 //
 // export const compareObjects = (o1: object, o2: object) => {

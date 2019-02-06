@@ -3,12 +3,12 @@ import * as ReactDOM from 'react-dom'
 import { cssRaw } from 'typestyle'
 
 import MiquidoDatePicker from './MiquidoDatePicker/MiquidoDatePicker'
-import { tripGateTheme } from './themes/tripgate/tripgate_theme'
+// import { tripGateTheme } from './themes/tripgate/tripgate_theme'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faArrowLeft, faArrowRight, faCaretDown } from '@fortawesome/free-solid-svg-icons'
-import {
-  IDefaultValue
-} from './MiquidoDatePicker/interfaces'
+// import {
+//   IDefaultValue
+// } from './MiquidoDatePicker/interfaces'
 // import { ITheme } from './themes/theme.interface'
 // import { pickingOptions, selectMethods } from './MiquidoDatePicker/enums'
 
@@ -39,62 +39,35 @@ cssRaw(`
 }
 `)
 
-// class TestInjection extends React.Component {
-//   render () {
-//     return (
-//       <div>test injection</div>
-//     )
-//   }
-// }
-
-console.log(tripGateTheme)
-
-interface DuoProps {
-}
-
-export interface DuoState {
-  startDateObj?: IDefaultValue | null
-}
-
-class DuoDate extends React.Component <DuoProps, DuoState> {
+class TestInjection extends React.Component {
   constructor (props: any) {
     super(props)
     this.state = {
-      startDateObj: null
+      date: new Date(2018, 11),
+      start: new Date(2018, 11, 3),
+      end: new Date(2018, 11, 3)
     }
-
-    this.handleSelect = this.handleSelect.bind(this)
-  }
-
-  handleSelect (value: any) {
-    this.setState({
-      startDateObj: {
-        start: new Date(value.year, value.month - 1, value.start),
-        display: new Date(value.year, value.month - 1, value.start)
-      }
-    })
+    setTimeout(() => this.setState({
+      date: new Date(2018, 4),
+      start: new Date(2018, 11, 4),
+      end: new Date(2018, 11, 4)
+    }), 1000)
   }
 
   render () {
     return (
-      <div>
-        <MiquidoDatePicker onSelect={this.handleSelect}
-                           theme={tripGateTheme}
-                           singleSelection={true}
-                           placeholder={'DD/MM/YYYY'}
-                           showOnlyStart={true}
-                           {...(this.state.startDateObj ? { defaultValue: this.state.startDateObj } : undefined)}
-        />
-        <MiquidoDatePicker
-          theme={tripGateTheme}
-          {...(this.state.startDateObj ? { defaultValue: this.state.startDateObj } : undefined)}
-          disabled={!Boolean(this.state.startDateObj)}
-          placeholder={'DD/MM/YYYY'}
-          showOnlyEnd={true}
-          {...(this.state.startDateObj ? { restrictions: { min: this.state.startDateObj.start } } : undefined)}
-          open={Boolean(this.state.startDateObj)}
-        />
-      </div>
+      <div><MiquidoDatePicker
+        defaultValue={{
+          // @ts-ignore
+          display: this.state.date,
+          // @ts-ignore
+          start: this.state.start,
+          // @ts-ignore
+          end: this.state.end
+        }}
+        type='single'
+        inputClass={'testingclass123'}
+      /></div>
     )
   }
 }
@@ -102,19 +75,59 @@ class DuoDate extends React.Component <DuoProps, DuoState> {
 export default ReactDOM.render(
   <>
     <MiquidoDatePicker
-      // restrictions={{
-      //   min: new Date(2018, 9, 6),
-      //   max: new Date(2018, 11, 24)
-      // }}
+      restrictions={{
+        start: {
+          min: new Date(2018, 11, 4),
+          max: new Date(2018, 11, 24)
+        },
+        end: {
+          min: new Date(2018, 11, 3),
+          max: new Date(2018, 11, 15)
+        }
+      }}
+      defaultValue={{
+        start: new Date(2018, 11, 5),
+        end: new Date(2018, 11, 6),
+        display: new Date(2018, 11)
+      }}
+      type='double'
+      inputClass={'testingclass123'}
+    />
+    <TestInjection/>
+
+    {/*<MiquidoDatePicker*/}
+    {/*defaultValue={{*/}
+    {/*start: new Date(2018, 11, 5),*/}
+    {/*end: new Date(2018, 11, 5),*/}
+    {/*display: new Date(2018, 11)*/}
+    {/*}}*/}
+    {/*singleSelection={true}*/}
+    {/*inputClass={'testingclass123'}*/}
+    {/*/>*/}
+    {/*<MiquidoDatePicker
       defaultValue={{
         start: new Date(2018, 11, 5),
         end: new Date(2018, 11, 5),
         display: new Date(2018, 11)
       }}
-      singleSelection={true}
+      type='single'
       inputClass={'testingclass123'}
     />
-    <DuoDate/>
+    <MiquidoDatePicker
+      restrictions={{
+        min: new Date(2018, 11, 4),
+        max: new Date(2018, 11, 24)
+      }}
+      defaultValue={{
+        start: new Date(2018, 11, 5),
+        end: new Date(2018, 11, 5),
+        display: new Date(2018, 11)
+      }}
+      type='double'
+      inputClass={'testingclass123'}
+    />*/}
+    {/*<MiquidoDatePicker />*/}
+    {/*<DuoDate/>*/}
     {/*<MiquidoDatePicker*/}
     {/*defaultValue={{*/}
     {/*start: new Date(2018, 11, 5),*/}
@@ -128,9 +141,9 @@ export default ReactDOM.render(
     {/*}}*/}
     {/*inputClass={'testingclass123'}*/}
     {/*/>*/}
-    {/*<MiquidoDatePicker selectCallback={(val) => console.log('new value: ' + JSON.stringify(val))}>*/}
-    {/*<input type='text' value={''}/>*/}
-    {/*</MiquidoDatePicker>*/}
+    {/*    <MiquidoDatePicker selectCallback={(val) => console.log('new value: ' + JSON.stringify(val))}>
+    <input type='text' value={''}/>
+    </MiquidoDatePicker>*/}
     {/*<div style={{ position: 'absolute', top: '70vh', right: 0 }}>*/}
     {/*<MiquidoDatePicker theme={tripGateTheme}*/}
     {/*beforeHeader={<TestInjection/>}*/}
@@ -145,7 +158,7 @@ export default ReactDOM.render(
     {/*<MiquidoDatePicker theme={tripGateTheme}/>*/}
     {/*</div>*/}
     {/*<MiquidoDatePicker singleSelection={true}>*/}
-    {/*<input type='text' value={''}/>*/}
+    {/*<p>asd</p>*/}
     {/*</MiquidoDatePicker>*/}
   </>,
   document.getElementById('root') as HTMLElement
