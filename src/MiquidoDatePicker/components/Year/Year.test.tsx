@@ -14,7 +14,8 @@ describe('Year', () => {
       mouseOverHandler: jest.fn(x => undefined),
       clickHandler: jest.fn(x => undefined)
     },
-    itemIndex: 23
+    itemIndex: 23,
+    allowed: true
   }
 
   const wrapper = shallow(<Year {...mock} />)

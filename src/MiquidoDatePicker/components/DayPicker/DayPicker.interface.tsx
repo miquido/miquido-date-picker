@@ -1,4 +1,4 @@
-import { IDaysEventsHandlers, IRestrictions, ISelectedDate } from '../../interfaces'
+import { IDaysEventsHandlers, IRestrictions } from '../../interfaces'
 import { ITheme } from '../../../themes/theme.interface'
 
 export interface IPickDayProps {
@@ -8,7 +8,7 @@ export interface IPickDayProps {
   theme: ITheme
   selectedYear: number
   selectedMonthIndex: number
-  selection?: ISelectedDate
+  selection?: Date | undefined
   restrictions?: IRestrictions
 }
 

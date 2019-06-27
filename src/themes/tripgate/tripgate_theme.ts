@@ -65,7 +65,8 @@ const daysHeaderDay = style({
   height: '25px',
   textAlign: 'center',
   fontFamily: 'Roboto',
-  margin: '0 3px'
+  margin: '0 3px',
+  fontWeight: 500
 })
 
 // FooterMenu

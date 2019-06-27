@@ -7,4 +7,5 @@ export interface IYear {
   eventsHandlers: IYearEventsHandlers
   itemIndex: number
   theme: ITheme
+  allowed: boolean
 }

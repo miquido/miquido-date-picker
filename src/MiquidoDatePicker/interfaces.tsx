@@ -66,6 +66,7 @@ export interface Props {
   node?: React.RefObject<any>
   type?: string
   onSelect?: (value: object) => void
+  onError?: (value: object) => void
   defaultValue?: IDefaultValue | undefined
   beforeHeader?: React.ReactNode
   beforeDayNamesRow?: React.ReactNode
@@ -82,6 +83,8 @@ export interface Props {
   close?: boolean
   name?: string
   onClick?: () => void
+  position?: string
+  positionHorizontal?: string
 }
 
 export interface State {

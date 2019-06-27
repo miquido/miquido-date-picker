@@ -119,7 +119,7 @@ export const assembleMultiSelectDate = (startDate: Date, endDate: Date) => {
   )
 }
 export const assembleDateForStartOnly = (startDate: Date) => {
-  const startDay = startDate.getDate() + 1
+  const startDay = startDate.getDate()
   const startMonth = startDate.getMonth() + 1
   const startYear = startDate.getFullYear()
 
@@ -129,7 +129,7 @@ export const assembleDateForStartOnly = (startDate: Date) => {
   return `${precedeZeroDay}${startDay}/${precedeZeroMonth}${startMonth}/${startYear}`
 }
 export const assembleDateForEndOnly = (endDate: Date) => {
-  const endDay = endDate.getDate() + 1
+  const endDay = endDate.getDate()
   const endMonth = endDate.getMonth() + 1
   const endYear = endDate.getFullYear()
 
@@ -241,8 +241,6 @@ export const checkIfDayIsNotAllowedForSelection = (restrictions: IRestrictions |
   if (restrictions) {
     if (restrictions.min && checkDate.getTime() <= restrictions.min.getTime()) return true
     if (restrictions.max && checkDate.getTime() >= restrictions.max.getTime()) return true
-  } else {
-    return true
   }
   return false
 }
@@ -292,7 +290,17 @@ export const objectEquals: any = (x: any, y: any) => {
       return objectEquals(x[i], y[i])
     })
 }
-//
-// export const compareObjects = (o1: object, o2: object) => {
-//   return JSON.stringify(o1) !== JSON.stringify(o2)
-// }
+
+export const checkIfYearIsAllowedToBeSelected = (year: number, restrictions: IRestrictions | undefined) => {
+  if (!restrictions) return true
+  if (restrictions.min && restrictions.max) {
+    return restrictions.min.getFullYear() <= year && restrictions.max.getFullYear() >= year
+  }
+  if (restrictions.min) {
+    return restrictions.min.getFullYear() <= year
+  }
+  if (restrictions.max) {
+    return restrictions.max.getFullYear() >= year
+  }
+  return true
+}

@@ -10,7 +10,7 @@ import {
 } from '../../functions'
 
 const PickDay = (props: IPickDayProps) => {
-  const pickedDate = props.selection && props.selection.start
+  const pickedDate = props.selection || false
   const today = new Date()
   today.setHours(0,0,0,0)
   const previousMonthDays = []
@@ -32,6 +32,7 @@ const PickDay = (props: IPickDayProps) => {
 
   const currentMonthDays = Array.from(new Array(numberOfDaysInMonth), (value: Iday, index: number) => {
     const dayDate = new Date(props.selectedYear, props.selectedMonthIndex, index + 1)
+
     return <Day
       key={`current-${index}`}
       displayValue={(index + 1).toString()}

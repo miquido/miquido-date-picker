@@ -104,5 +104,5 @@ export const isValidToSelect = (valueObj: ISelectionObject, restrictions: IRestr
   if (!valueObj.day || !valueObj.month || !valueObj.year) return false
   if (valueObj.day <= 0) return false
   if (!isValidDate(valueObj.dateString)) return false
-  return checkIfDayIsNotAllowedForSelection(restrictions, valueObj.date as Date)
+  return !checkIfDayIsNotAllowedForSelection(restrictions, valueObj.date as Date)
 }

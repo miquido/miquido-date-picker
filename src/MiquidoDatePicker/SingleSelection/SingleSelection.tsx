@@ -12,14 +12,13 @@ import {
   Props,
   SingleSelectionState
 } from '../interfaces'
-import { pickingOptions } from '../enums'
+import { pickerPositions, pickingOptions } from '../enums'
 import { monthNames, yearsDisplayedPerScreen, animationDuration } from '../consts'
 import {
   assembleDate, assembleDateForEndOnly,
   assembleDateForStartOnly,
   assembleMultiSelectDate,
-  getClassFor, getDayOfTheWeek,
-  objectEquals,
+  getClassFor, getDayOfTheWeek, objectEquals,
   setRawStyles
 } from '../functions'
 import { picker, pickerWrapper } from './../MiquidoDatePicker.classname'
@@ -134,12 +133,14 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
 
     for (let i = 0; i < yearsDisplayedPerScreen; i++) {
       const year = firstYear + i
-      years.push({
-        name: year,
-        selected: this.state.displayedYear === year,
-        eventsHandlers: this.yearEventsHandlers,
-        itemIndex: i
-      })
+      if (year > 0) {
+        years.push({
+          name: year,
+          selected: this.state.displayedYear === year,
+          eventsHandlers: this.yearEventsHandlers,
+          itemIndex: i
+        })
+      }
     }
 
     return years
@@ -222,55 +223,28 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     document.removeEventListener('mousedown', this._onMouseUp, false)
   }
 
-  upd (newProps: any) {
-    if (newProps.defaultValue) {
-      const newDefault = newProps.defaultValue
-      const newInputValue = this.setDefaultDate(newDefault) ? this.setDefaultDate(newDefault) : ''
-      const updState = {
-        inputValue: newInputValue,
-        selectedDate: {
-          ...this.state.selectedDate,
-          start: newDefault.start,
-          end: newDefault.end || newDefault.start
-        },
-        displayedMonthIndex: newDefault.display.getMonth() || this.now.getMonth(),
-        displayedYear: newDefault.display.getFullYear() || this.now.getFullYear()
+  componentDidUpdate (prevProps: any) {
+    const oldDefault = prevProps.defaultValue
+    const newDefault = this.props.defaultValue
+
+    if (!objectEquals(oldDefault, newDefault)) {
+      if (newDefault) {
+        const newInputValue = this.setDefaultDate(newDefault) ? this.setDefaultDate(newDefault) : ''
+        const updState = {
+          inputValue: newInputValue,
+          selectedDate: {
+            ...prevProps.defaultValue
+          },
+          displayedMonthIndex: newDefault.display.getMonth() || this.now.getMonth(),
+          displayedYear: newDefault.display.getFullYear() || this.now.getFullYear()
+        }
+        this.setState(updState)
+        void this.init()
       }
-      this.setState(updState)
-      void this.init()
     }
   }
-  upd2 (newProps: any) {
-    if (newProps.defaultValue) {
-      const newDefault = newProps.defaultValue
-      const newInputValue = this.setDefaultDate(newDefault) ? this.setDefaultDate(newDefault) : ''
-      const updState = {
-        inputValue: newInputValue,
-        selectedDate: {
-          ...newProps.defaultValue
-        },
-        displayedMonthIndex: newDefault.display.getMonth() || this.now.getMonth(),
-        displayedYear: newDefault.display.getFullYear() || this.now.getFullYear()
-      }
-      this.setState(updState)
-      void this.init()
-    }
-  }
+
   componentWillUpdate (newProps: any, newState: any) {
-    if (!objectEquals(this.state.selectedDate, newState.selectedDate)) {
-      console.log('1')
-      this.upd(newProps)
-
-    } else {
-      console.log(JSON.stringify(this.state.selectedDate))
-      console.log(JSON.stringify(newState.selectedDate))
-    }
-    if (!objectEquals(this.props.defaultValue, newProps.defaultValue)) {
-      console.log('2')
-      this.upd2(newProps)
-
-    }
-
     if (newProps.disabled !== undefined && this.state.disabled !== newProps.disabled) {
       this.setState({ disabled: newProps.disabled })
     }
@@ -294,13 +268,41 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       this.setCalendarPosition(this.node.current.getBoundingClientRect() as DOMRect)
     }
     if (this.props.defaultValue) {
-      this.setState({ selectedDate: this.props.defaultValue })
+      this.setState({ selectedDate: this.splitDefaultValue(this.props.defaultValue) })
     }
     this.setState({ yearsList: this.getYears(this.getInitialYear()) })
   }
 
+  splitDefaultValue (val: IDefaultValue) {
+    if (this.props.showOnlyStart) return { ...val, end: null }
+    if (this.props.showOnlyEnd) return { ...val, start: null }
+    return val
+  }
+
   setCalendarPosition (bcr: DOMRect) {
     this.positionStyles = {}
+    if (this.props.position) {
+      const position = this.props.position
+      if (position === pickerPositions.TOP) {
+        if (bcr.x > (window.innerWidth / 2)) {
+          this.positionStyles.right = 0
+        } else {
+          this.positionStyles.left = 0
+        }
+        this.positionStyles.bottom = bcr.height + 'px'
+        return
+      }
+      if (position === pickerPositions.BOTTOM) {
+        if (bcr.x > (window.innerWidth / 2)) {
+          this.positionStyles.right = 0
+        } else {
+          this.positionStyles.left = 0
+        }
+        this.positionStyles.top = bcr.height + 'px'
+        return
+      }
+    }
+
     if (bcr.x > (window.innerWidth / 2)) {
       this.positionStyles.right = 0
     } else {
@@ -338,6 +340,40 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     return this.state.selectedDate.end !== undefined && this.state.selectedDate.end !== null
   }
 
+  handleError (newDateObject: any) {
+    if (this.props.onError) {
+      this.props.onError(this.inputValueObjToCallback(newDateObject))
+    }
+  }
+
+  inputValueObjToCallback (newDateObject: any) {
+    return {
+      date: newDateObject.date,
+      end: newDateObject.day,
+      inputValue: newDateObject.dateString,
+      month: newDateObject.month,
+      start: newDateObject.day,
+      year: newDateObject.year
+    }
+  }
+
+  saveSelectionForTyping (newDateObject: any) {
+    this.setState({
+      selectedDate: {
+        start: newDateObject.date,
+        end: newDateObject.date,
+        display: newDateObject.date
+      },
+      displayedMonthIndex: newDateObject.month - 1,
+      displayedYear: newDateObject.year,
+      yearsList: this.getYears(newDateObject.year)
+    })
+
+    if (this.props.onSelect) {
+      this.props.onSelect(this.inputValueObjToCallback(newDateObject))
+    }
+  }
+
   /**
    * Save selection
    *
@@ -360,7 +396,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
 
     } else {
       if (this.props.showOnlyStart) {
-        value = assembleDateForStartOnly(new Date(year, month, singleIndex))
+        value = assembleDateForStartOnly(new Date(year, month, singleIndex + 1))
       } else {
         value = assembleDate(singleIndex + 1, singleIndex + 1, month, year)
       }
@@ -414,17 +450,9 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     const newDateObject = newDateFromParsed(newValue)
 
     if (isValidToSelect(newDateObject, this.props.restrictions)) {
-      this.setState({
-        selectedDate: {
-          start: newDateObject.date,
-          end: newDateObject.date,
-          display: newDateObject.date
-        },
-        displayedMonthIndex: newDateObject.month - 1,
-        displayedYear: newDateObject.year
-      })
-      this.saveSelection(newDateObject.day, false)
-      this.setState({ yearsList: this.getYears(newDateObject.year) })
+      this.saveSelectionForTyping(newDateObject)
+    } else {
+      this.handleError(newDateObject)
     }
     if (typedValue.length > maxLength) {
       this.setState({ inputValue: '' })
@@ -580,9 +608,13 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
   setDefaultDate (defaultValue: IDefaultValue) {
     // TODO should set selected
     if (!defaultValue) return
+    if (this.props.showOnlyStart === true && defaultValue.start) {
+      return assembleDateForStartOnly(defaultValue.start)
+    }
     if (defaultValue.end) {
-      if (this.props.showOnlyStart === true && defaultValue.start) return assembleDateForStartOnly(defaultValue.start)
-      if (this.props.showOnlyEnd === true) return assembleDateForEndOnly(defaultValue.end)
+      if (this.props.showOnlyEnd === true) {
+        return assembleDateForEndOnly(defaultValue.end)
+      }
 
       if (defaultValue.start) {
         if (defaultValue.start.getTime() !== defaultValue.end.getTime()) {
@@ -597,15 +629,15 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
           defaultValue.start.getMonth(),
           defaultValue.start.getFullYear()
         )
-      } else {
-        return assembleDate(
-          defaultValue.display.getDate(),
-          undefined,
-          defaultValue.display.getMonth(),
-          defaultValue.display.getFullYear()
-        )
       }
-
+    }
+    if (defaultValue.start) {
+      return assembleDate(
+        defaultValue.display.getDate(),
+        undefined,
+        defaultValue.display.getMonth(),
+        defaultValue.display.getFullYear()
+      )
     }
     return ''
   }
@@ -622,11 +654,8 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     clickHandler: this.monthClickHandler.bind(this)
   }
 
-  setInputDateSchema (schema = 'dd/mm/yyyy') {
-    this.setState({ inputValue: schema })
-  }
-
   render () {
+
     return (
       <div className={getClassFor({ key: 'pickerWrapper', theme: this.theme, defaultClass: pickerWrapper })}
            ref={this.node}
@@ -640,6 +669,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
           disabled={this.state.disabled}
           placeholder={this.props.placeholder || ''}
           name={this.props.name || ''}
+          isVisible={this.state.isPickerVisible}
         />
         <CSSTransition
           in={this.state.isPickerVisible}
@@ -668,6 +698,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
             >
               <YearPicker years={this.state.yearsList}
                           theme={this.theme}
+                          restrictions={this.props.restrictions}
               />
             </CSSTransition>
             <CSSTransition
@@ -685,12 +716,13 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
               theme={this.theme}
             />
             {this.props.beforeBody}
+
             <PickDay pastDaysAmount={getDayOfTheWeek(this.state.displayedMonthIndex, this.state.displayedYear)}
                      eventsHandlers={this.eventsHandlers}
                      theme={this.theme}
                      selectedYear={this.state.displayedYear}
                      selectedMonthIndex={this.state.displayedMonthIndex}
-                     selection={this.state.selectedDate}
+                     selection={this.getSelectionForDays()}
                      restrictions={this.props.restrictions}
             />
             {this.props.beforeFooter}
@@ -703,6 +735,12 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
         </CSSTransition>
       </div>
     )
+  }
+
+  getSelectionForDays () {
+    if (this.props.showOnlyEnd && this.state.selectedDate.end) return this.state.selectedDate.end
+    if (this.state.selectedDate.start) return this.state.selectedDate.start
+    return undefined
   }
 
   onInputClickHandler () {

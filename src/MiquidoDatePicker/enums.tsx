@@ -8,3 +8,10 @@ export enum pickingOptions {
   MONTH = 'month',
   YEAR = 'year'
 }
+
+export enum pickerPositions {
+  TOP = 'top',
+  BOTTOM = 'bottom',
+  LEFT = 'left',
+  RIGHT = 'right'
+}

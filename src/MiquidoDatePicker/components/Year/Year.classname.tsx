@@ -26,3 +26,14 @@ export const selectedClass = style({
   color: '#ffffff',
   borderRadius: '2px'
 })
+
+export const disabledClass = style({
+  color: '#c4c5ca',
+  cursor: 'normal',
+  $nest: {
+    '&:hover': {
+      color: '#c4c5ca',
+      backgroundColor: 'transparent'
+    }
+  }
+})
