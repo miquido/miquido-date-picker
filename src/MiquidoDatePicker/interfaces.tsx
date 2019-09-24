@@ -104,6 +104,7 @@ export interface State {
   yearsList: IYearObject[]
   selectedDate: ISelectedDate
   disabled?: boolean | undefined
+  lastValidSelectedDate?: Date | undefined
 }
 
 export interface SingleSelectionState {
@@ -120,6 +121,7 @@ export interface SingleSelectionState {
   type?: string
   userForcedClose: boolean
   inputClass?: string | undefined
+  lastValidSelectedDate?: Date | undefined
 }
 
 export interface ISelectionCheck {

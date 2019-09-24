@@ -50,7 +50,8 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       selectedDate: this.getDefaultValue(),
       disabled: !!props.disabled,
       userForcedClose: false,
-      inputClass: props.inputClass || ''
+      inputClass: props.inputClass || '',
+      lastValidSelectedDate: undefined
     }
     this.theme = props.theme || defaultTheme
     this.node = React.createRef()
@@ -87,7 +88,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
    */
   clickOutsideHandler: EventListenerOrEventListenerObject = (e) => {
     if (!this.node.current || !this.node.current.contains(e.target)) {
-      this.closePicker()
+      this.closePickerAndValidateDate()
     }
   }
   /**
@@ -427,7 +428,9 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     if (shouldClosePicker) {
       this.closePicker()
     }
-
+    this.setState({
+      lastValidSelectedDate: new Date(year, month, singleIndex + 1)
+    })
     this.userSavedDate = true
   }
 
@@ -775,6 +778,22 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
   private closePicker () {
     this.setState({ isPickerVisible: false, userForcedClose: true })
     document.removeEventListener('mousedown', this.clickOutsideHandler, false)
+  }
+
+  closePickerAndValidateDate () {
+    if (this.state.lastValidSelectedDate &&
+      SingleSelection.isInputValueAndLastValidSelectionDifferent(this.state.inputValue as string, this.state.lastValidSelectedDate)) {
+      this.setState({
+        displayedMonthIndex: this.state.lastValidSelectedDate.getMonth(),
+        displayedYear : this.state.lastValidSelectedDate.getFullYear()
+      })
+      this.saveSelection(this.state.lastValidSelectedDate.getDate() - 1, false)
+    }
+    this.closePicker()
+  }
+  private static isInputValueAndLastValidSelectionDifferent (inputVal: string, lastSelection: Date) {
+    const dateFromInput = new Date(inputVal)
+    return lastSelection.getTime() !== dateFromInput.getTime()
   }
 }
 
