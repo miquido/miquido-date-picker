@@ -693,6 +693,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
                         nextMonth={this.nextButtonHandler}
                         prevMonth={this.prevButtonHandler}
                         theme={this.theme}
+                        shoudlDisplayArrows={this.state.currentlyPicking !== pickingOptions.MONTH}
             />
             <CSSTransition
               in={this.state.currentlyPicking === pickingOptions.YEAR}

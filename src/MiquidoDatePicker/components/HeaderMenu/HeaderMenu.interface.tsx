@@ -6,4 +6,5 @@ export interface IHeaderMenu {
   nextMonth: () => void
   prevMonth: () => void
   theme?: object
+  shoudlDisplayArrows?: boolean
 }

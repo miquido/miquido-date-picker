@@ -1,6 +1,6 @@
 {
   "name": "miquido-d-p",
-  "version": "0.7.8",
+  "version": "0.7.9",
   "private": false,
   "peerDependencies": {
     "typestyle": "2.0.1",

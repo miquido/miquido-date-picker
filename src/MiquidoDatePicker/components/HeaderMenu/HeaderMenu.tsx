@@ -16,8 +16,8 @@ const HeaderMenu = (props: IHeaderMenu) => {
 
   return (
     <div className={getClassFor({ key: 'headerMenu', theme: props.theme, defaultClass: wrapperClass })}>
-      <div className={getClassFor({ key: 'prevMonthBtn', theme: props.theme, defaultClass: prevMonth })}
-           onClick={props.prevMonth}><FontAwesomeIcon icon='arrow-left' size='sm'/></div>
+      {props.shoudlDisplayArrows && <div className={getClassFor({ key: 'prevMonthBtn', theme: props.theme, defaultClass: prevMonth })}
+           onClick={props.prevMonth}><FontAwesomeIcon icon='arrow-left' size='sm'/></div>}
       <div className={getClassFor({ key: 'monthSelectBtn', theme: props.theme, defaultClass: monthSelectPicker })}>
         <span onClick={props.switchToMonthSelect}
               className={getClassFor({ key: 'headerDisplayedMonth', theme: props.theme, defaultClass: headerDisplayedMonth })}>
@@ -32,8 +32,8 @@ const HeaderMenu = (props: IHeaderMenu) => {
             icon='caret-down' size='sm'/>
         </span>
       </div>
-      <div className={getClassFor({ key: 'nextMonthBtn', theme: props.theme, defaultClass: nextMonth })}
-           onClick={props.nextMonth}><FontAwesomeIcon icon='arrow-right' size='sm'/></div>
+      {props.shoudlDisplayArrows && <div className={getClassFor({ key: 'nextMonthBtn', theme: props.theme, defaultClass: nextMonth })}
+           onClick={props.nextMonth}><FontAwesomeIcon icon='arrow-right' size='sm'/></div>}
     </div>
   )
 }
