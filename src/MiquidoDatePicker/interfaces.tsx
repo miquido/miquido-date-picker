@@ -66,6 +66,7 @@ export interface Props {
   node?: React.RefObject<any>
   type?: string
   onSelect?: (value: object) => void
+  onInputChange?: (inputValue: string) => void
   onError?: (value: object) => void
   defaultValue?: IDefaultValue | undefined
   beforeHeader?: React.ReactNode
@@ -118,6 +119,7 @@ export interface SingleSelectionState {
   disabled?: boolean | undefined
   type?: string
   userForcedClose: boolean
+  inputClass?: string | undefined
 }
 
 export interface ISelectionCheck {

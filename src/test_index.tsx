@@ -45,12 +45,14 @@ class TestInjection extends React.Component {
     this.state = {
       date: new Date(2018, 11),
       start: new Date(2018, 11, 3),
-      end: new Date(2018, 11, 3)
+      end: new Date(2018, 11, 3),
+      inputClass: 'testingclass123'
     }
     setTimeout(() => this.setState({
-      date: new Date(2018, 4),
-      start: new Date(2018, 11, 11),
-      end: new Date(2018, 11, 11)
+      date: new Date('01/01/2020'),
+      start: new Date('01/01/2020'),
+      end: new Date('01/01/2020'),
+      inputClass: 'updatedClass456'
     }), 1000)
   }
 
@@ -66,7 +68,8 @@ class TestInjection extends React.Component {
           end: this.state.end
         }}
         type='single'
-        inputClass={'testingclass123'}
+        // @ts-ignore
+        inputClass={this.state.inputClass}
         onSelect={console.log}
         position='bottom'
       /></div>

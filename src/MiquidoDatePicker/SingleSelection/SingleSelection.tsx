@@ -31,7 +31,6 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
   now = new Date()
   currentMonth = this.now.getMonth()
   theme = {}
-  inputClass = ''
   monthsList: IMonthObject[]
   userSavedDate = false
   private node: any
@@ -50,13 +49,13 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       yearsList: [], // TODO remove
       selectedDate: this.getDefaultValue(),
       disabled: !!props.disabled,
-      userForcedClose: false
+      userForcedClose: false,
+      inputClass: props.inputClass || ''
     }
     this.theme = props.theme || defaultTheme
     this.node = React.createRef()
     this.positionStyles = {}
     this.monthsList = this.getMonths() // TODO move to components
-    if (props.inputClass) this.inputClass = props.inputClass
 
     this.switchToYearSelect = this.switchToYearSelect.bind(this)
     this.switchToMonthSelect = this.switchToMonthSelect.bind(this)
@@ -169,7 +168,8 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
   }
 
   getInitialMonth () {
-    return (this.props.defaultValue && this.props.defaultValue.display.getMonth()) || this.currentMonth
+    if (!this.props.defaultValue) return this.currentMonth
+    return this.props.defaultValue.display.getMonth()
   }
 
   getInitialYear () {
@@ -230,17 +230,21 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     if (!objectEquals(oldDefault, newDefault)) {
       if (newDefault) {
         const newInputValue = this.setDefaultDate(newDefault) ? this.setDefaultDate(newDefault) : ''
+        const newMonth = newDefault.display
+        const newDisplayMonthIndex = (Number.isInteger(newMonth.getMonth())) ? newMonth.getMonth() : this.now.getMonth()
         const updState = {
           inputValue: newInputValue,
           selectedDate: {
             ...prevProps.defaultValue
           },
-          displayedMonthIndex: newDefault.display.getMonth() || this.now.getMonth(),
-          displayedYear: newDefault.display.getFullYear() || this.now.getFullYear()
+          displayedMonthIndex: newDisplayMonthIndex,
+          displayedYear: newDefault.display.getFullYear() || this.now.getFullYear(),
+          inputClass: this.props.inputClass || ''
         }
         this.setState(updState)
         void this.init()
       }
+
     }
   }
 
@@ -385,7 +389,6 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     const end = this.state.selectedDate.end as Date
     const month = this.state.displayedMonthIndex
     const year = this.state.displayedYear
-
     if ((!singleIndex && singleIndex !== 0) || !Number.isInteger(singleIndex)) {
       if ((!start && start !== 0) || (!end && end !== 0)) return
       if (this.props.showOnlyEnd) {
@@ -435,11 +438,11 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
    */
   // TODO move to input component
   handleChange (event: React.ChangeEvent<HTMLInputElement>) {
+
     const element = event.target
     const caret = element.selectionStart
     let typedValue = element.value
     const maxLength = 10
-
     window.requestAnimationFrame(() => {
       element.selectionStart = caret
       element.selectionEnd = caret
@@ -467,6 +470,9 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       })
     } else {
       this.setState({ inputValue: newValue })
+      if (this.props.onInputChange) {
+        this.props.onInputChange(newValue)
+      }
     }
     if (newValue.length < maxLength) {
       window.requestAnimationFrame(() => {
@@ -597,7 +603,6 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       if (newYear < 0) {
         newYear = 1
       }
-
       this.setState({
         displayedMonthIndex: newMonthIndex,
         displayedYear: newYear
@@ -663,7 +668,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
         <InputComponent
           children={this.props.children}
           inputValue={this.state.inputValue || (this.state.defaultValue && this.setDefaultDate(this.state.defaultValue)) || ''}
-          inputClass={`miquido-date-picker__input ${this.inputClass}`}
+          inputClass={`miquido-date-picker__input ${this.state.inputClass}`}
           onClickHandler={this.onInputClickHandler}
           onChangeHandler={this.handleChange}
           disabled={this.state.disabled}
