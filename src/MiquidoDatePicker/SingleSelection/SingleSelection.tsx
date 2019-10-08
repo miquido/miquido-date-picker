@@ -371,7 +371,8 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       },
       displayedMonthIndex: newDateObject.month - 1,
       displayedYear: newDateObject.year,
-      yearsList: this.getYears(newDateObject.year)
+      yearsList: this.getYears(newDateObject.year),
+      lastValidSelectedDate: newDateObject.date
     })
 
     if (this.props.onSelect) {
@@ -441,6 +442,8 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
    */
   // TODO move to input component
   handleChange (event: React.ChangeEvent<HTMLInputElement>) {
+    const dYear = this.state.displayedYear
+    const dmonth = this.state.displayedMonthIndex
 
     const element = event.target
     const caret = element.selectionStart
@@ -454,7 +457,6 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     typedValue = setCorrectTypedValue(typedValue, element.selectionEnd as number)
     const newValue = parseDate(typedValue)
     const newDateObject = newDateFromParsed(newValue)
-
     if (isValidToSelect(newDateObject, this.props.restrictions)) {
       this.saveSelectionForTyping(newDateObject)
     } else {
@@ -462,8 +464,6 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     }
     if (typedValue.length > maxLength) {
       this.setState({ inputValue: '' })
-      const dYear = this.state.displayedYear
-      const dmonth = this.state.displayedMonthIndex
       this.setState({
         selectedDate: {
           start: null,
@@ -472,6 +472,15 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
         }
       })
     } else {
+      if (newValue.length === 0) {
+        this.setState({
+          selectedDate: {
+            start: null,
+            end: null,
+            display: new Date(dYear, dmonth)
+          }
+        })
+      }
       this.setState({ inputValue: newValue })
       if (this.props.onInputChange) {
         this.props.onInputChange(newValue)
@@ -662,6 +671,12 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     clickHandler: this.monthClickHandler.bind(this)
   }
 
+  setPickerValueFromInput = () => {
+    if (this.state.defaultValue && typeof this.state.inputValue === 'string' && this.state.inputValue.length === 0) {
+      return this.state.inputValue
+    }
+    return this.state.inputValue || (this.state.defaultValue && this.setDefaultDate(this.state.defaultValue)) || ''
+  }
   render () {
 
     return (
@@ -670,7 +685,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       >
         <InputComponent
           children={this.props.children}
-          inputValue={this.state.inputValue || (this.state.defaultValue && this.setDefaultDate(this.state.defaultValue)) || ''}
+          inputValue={this.setPickerValueFromInput()}
           inputClass={`miquido-date-picker__input ${this.state.inputClass}`}
           onClickHandler={this.onInputClickHandler}
           onChangeHandler={this.handleChange}
@@ -781,7 +796,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
   }
 
   closePickerAndValidateDate () {
-    if (this.state.lastValidSelectedDate &&
+    if (this.state.lastValidSelectedDate && this.state.inputValue !== '' &&
       SingleSelection.isInputValueAndLastValidSelectionDifferent(this.state.inputValue as string, this.state.lastValidSelectedDate)) {
       this.setState({
         displayedMonthIndex: this.state.lastValidSelectedDate.getMonth(),
