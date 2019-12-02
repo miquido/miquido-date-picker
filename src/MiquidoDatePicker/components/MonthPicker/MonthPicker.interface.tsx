@@ -1,4 +1,4 @@
-import { IMonthObject } from '../../interfaces'
+import { IMonthObject, IRestrictions } from '../../interfaces'
 import { ITheme } from '../../../themes/theme.interface'
 
 export interface IMonthPicker {
@@ -6,4 +6,6 @@ export interface IMonthPicker {
   selected?: boolean
   eventsHandlers?: object
   theme: ITheme
+  restrictions?: IRestrictions
+  displayedYear: number
 }

@@ -247,6 +247,12 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       }
 
     }
+
+    if (prevProps.inputClass && this.props.inputClass !== prevProps.inputClass) {
+      this.setState({
+        inputClass: this.props.inputClass
+      })
+    }
   }
 
   componentWillUpdate (newProps: any, newState: any) {
@@ -287,36 +293,22 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
   setCalendarPosition (bcr: DOMRect) {
     this.positionStyles = {}
     if (this.props.position) {
-      const position = this.props.position
-      if (position === pickerPositions.TOP) {
-        if (bcr.x > (window.innerWidth / 2)) {
-          this.positionStyles.right = 0
-        } else {
-          this.positionStyles.left = 0
-        }
-        this.positionStyles.bottom = bcr.height + 'px'
-        return
-      }
-      if (position === pickerPositions.BOTTOM) {
-        if (bcr.x > (window.innerWidth / 2)) {
-          this.positionStyles.right = 0
-        } else {
-          this.positionStyles.left = 0
-        }
-        this.positionStyles.top = bcr.height + 'px'
-        return
-      }
-    }
-
-    if (bcr.x > (window.innerWidth / 2)) {
-      this.positionStyles.right = 0
-    } else {
-      this.positionStyles.left = 0
-    }
-    if (bcr.y > (window.innerHeight / 2)) {
+      const { position } = this.props
+      if (position === pickerPositions.TOP) this.positionStyles.bottom = bcr.height + 'px'
+      if (position === pickerPositions.BOTTOM) this.positionStyles.top = bcr.height + 'px'
+    } else if (bcr.y > (window.innerHeight / 2)) {
       this.positionStyles.bottom = bcr.height + 'px'
     } else {
       this.positionStyles.top = bcr.height + 'px'
+    }
+    if (this.props.positionHorizontal) {
+      const { positionHorizontal } = this.props
+      if (positionHorizontal === pickerPositions.LEFT) this.positionStyles.left = 0
+      if (positionHorizontal === pickerPositions.RIGHT) this.positionStyles.right = 0
+    } else if (bcr.x > (window.innerWidth / 2)) {
+      this.positionStyles.right = 0
+    } else {
+      this.positionStyles.left = 0
     }
   }
 
@@ -537,7 +529,8 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
       const firstSeparatorIndex = oldInputValue.indexOf(separator[0])
       const lastSepearatorIndex = oldInputValue.lastIndexOf(separator[0]) + 1
       if (separator.length === 2) {
-        const newMonthInDoubleDigitFormat = newMonth < 10 ? `0${newMonth + 1}` : newMonth + 1
+        const newMonthNumberFromIndex = newMonth + 1
+        const newMonthInDoubleDigitFormat = newMonthNumberFromIndex < 10 ? `0${newMonthNumberFromIndex}` : newMonthNumberFromIndex
         this.setState({
           inputValue: oldInputValue.substring(0, firstSeparatorIndex)
             + separator[0] + (newMonthInDoubleDigitFormat).toString() + separator[0] +
@@ -700,6 +693,12 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
           classNames='picker'
           unmountOnExit
           onExited={this.closePicker}
+          onEntered={() => {
+            if (this.props.onOpen) {
+              this.props.onOpen.call(this, this.node)
+            }
+          }
+          }
         >
           <div className={getClassFor({ key: 'picker', theme: this.theme, defaultClass: picker })}
                style={this.positionStyles}>
@@ -732,6 +731,8 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
               unmountOnExit
             >
               <MonthPicker months={this.monthsList} eventsHandlers={this.eventsHandlers}
+                           restrictions={this.props.restrictions}
+                           displayedYear={this.state.displayedYear}
                            theme={this.theme}
               />
             </CSSTransition>
@@ -793,6 +794,9 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
   private closePicker () {
     this.setState({ isPickerVisible: false, userForcedClose: true })
     document.removeEventListener('mousedown', this.clickOutsideHandler, false)
+    if (this.props.onClose) {
+      this.props.onClose()
+    }
   }
 
   closePickerAndValidateDate () {

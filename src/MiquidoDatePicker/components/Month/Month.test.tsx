@@ -7,7 +7,8 @@ describe('Month', () => {
   const mock = {
     displayValue: 'may',
     itemIndex: 4,
-    theme: tripGateTheme
+    theme: tripGateTheme,
+    allowed: true
   }
 
   const wrapper = shallow(<Month {...mock} />)

@@ -29,7 +29,7 @@ export const selectedClass = style({
 
 export const disabledClass = style({
   color: '#c4c5ca',
-  cursor: 'normal',
+  cursor: 'not-allowed',
   $nest: {
     '&:hover': {
       color: '#c4c5ca',

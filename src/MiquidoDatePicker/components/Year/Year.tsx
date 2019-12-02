@@ -18,7 +18,7 @@ const Year = (props: IYear) => {
          onClick={(_) => props.allowed && props.eventsHandlers && props.eventsHandlers.clickHandler(+props.displayValue)}
          onContextMenu={(_) => props.allowed && props.eventsHandlers && props.eventsHandlers.clickHandler(+props.displayValue)}
     >
-      {props.displayValue}{props.allowed}
+      {props.displayValue}
     </div>
   )
 }

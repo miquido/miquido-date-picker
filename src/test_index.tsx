@@ -39,71 +39,73 @@ cssRaw(`
 }
 `)
 
-class TestInjection extends React.Component {
-  constructor (props: any) {
-    super(props)
-    this.state = {
-      date: new Date(2018, 11),
-      start: new Date(2018, 11, 3),
-      end: new Date(2018, 11, 3),
-      inputClass: 'testingclass123'
-    }
-    setTimeout(() => this.setState({
-      date: new Date('01/01/2020'),
-      start: new Date('01/01/2020'),
-      end: new Date('01/01/2020'),
-      inputClass: 'updatedClass456'
-    }), 1000)
-  }
-
-  render () {
-    return (
-      <div><MiquidoDatePicker
-        defaultValue={{
-          // @ts-ignore
-          display: this.state.date,
-          // @ts-ignore
-          start: this.state.start,
-          // @ts-ignore
-          end: this.state.end
-        }}
-        type='single'
-        // @ts-ignore
-        inputClass={this.state.inputClass}
-        onSelect={console.log}
-        position='bottom'
-      /></div>
-    )
-  }
-}
+// class TestInjection extends React.Component {
+//   constructor (props: any) {
+//     super(props)
+//     this.state = {
+//       date: new Date(2018, 11),
+//       start: new Date(2018, 11, 3),
+//       end: new Date(2018, 11, 3),
+//       inputClass: 'testingclass123'
+//     }
+//     setTimeout(() => this.setState({
+//       date: new Date('01/01/2020'),
+//       start: new Date('01/01/2020'),
+//       end: new Date('01/01/2020'),
+//       inputClass: 'updatedClass456'
+//     }), 1000)
+//   }
+//
+//   render () {
+//     return (
+//       <div><MiquidoDatePicker
+//         defaultValue={{
+//           // @ts-ignore
+//           display: this.state.date,
+//           // @ts-ignore
+//           start: this.state.start,
+//           // @ts-ignore
+//           end: this.state.end
+//         }}
+//         type='single'
+//         // @ts-ignore
+//         inputClass={this.state.inputClass}
+//         onSelect={console.log}
+//         position='bottom'
+//         positionHorizontal='left'
+//         onOpen={(x) => console.log('open2', x)}
+//       /></div>
+//     )
+//   }
+// }
 
 export default ReactDOM.render(
   <>
     <MiquidoDatePicker onSelect={console.log} onError={console.error} restrictions={{
-      min: new Date(2018, 11, 4),
-      max: new Date(2022, 11, 4)
-    }}/>
-    <MiquidoDatePicker
-      restrictions={{
-        start: {
-          min: new Date(2018, 11, 4),
-          max: new Date(2020, 11, 24)
-        },
-        end: {
-          min: new Date(2018, 11, 3),
-          max: new Date(2025, 11, 15)
-        }
-      }}
-      defaultValue={{
-        start: new Date(2018, 11, 5),
-        end: new Date(2018, 11, 6),
-        display: new Date(2018, 11)
-      }}
-      type='double'
-      inputClass={'testingclass123'}
-      onSelect={console.log}
+      min: new Date('2019-12-01')
+    }}
     />
-    <TestInjection/>
+    {/*<MiquidoDatePicker*/}
+    {/*  restrictions={{*/}
+    {/*    start: {*/}
+    {/*      min: new Date(2018, 11, 4),*/}
+    {/*      max: new Date(2020, 11, 24)*/}
+    {/*    },*/}
+    {/*    end: {*/}
+    {/*      min: new Date(2018, 11, 3),*/}
+    {/*      max: new Date(2025, 11, 15)*/}
+    {/*    }*/}
+    {/*  }}*/}
+    {/*  defaultValue={{*/}
+    {/*    start: new Date(2018, 11, 5),*/}
+    {/*    end: new Date(2018, 11, 6),*/}
+    {/*    display: new Date(2018, 11)*/}
+    {/*  }}*/}
+    {/*  type='double'*/}
+    {/*  inputClass={'testingclass123'}*/}
+    {/*  onSelect={console.log}*/}
+    {/*/>*/}
+    {/*<TestInjection/>*/}
 
     {/*<MiquidoDatePicker*/}
     {/*defaultValue={{*/}
@@ -164,9 +166,10 @@ export default ReactDOM.render(
     {/*<input type='text' value={''}/>*/}
     {/*</MiquidoDatePicker>*/}
     {/*</div>*/}
-    <div style={{ position: 'absolute', top: '5vh', right: 0 }}>
-    <MiquidoDatePicker position='bottom' />
-    </div>
+    {/*<div style={{ position: 'absolute', top: '5vh', right: 0 }}>*/}
+    {/*<MiquidoDatePicker position='bottom'*/}
+    {/*                   positionHorizontal='left'/>*/}
+    {/*</div>*/}
     {/*<MiquidoDatePicker singleSelection={true}>*/}
     {/*<p>asd</p>*/}
     {/*</MiquidoDatePicker>*/}

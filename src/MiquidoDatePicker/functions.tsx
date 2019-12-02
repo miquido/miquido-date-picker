@@ -304,3 +304,21 @@ export const checkIfYearIsAllowedToBeSelected = (year: number, restrictions: IRe
   }
   return true
 }
+
+export const checkIfMonthIsAllowedToBeSelected = (monthIndex: number, displayedYear: number, restrictions: IRestrictions | undefined) => {
+  if (!restrictions) return true
+  const testDate = new Date(displayedYear, monthIndex, 1, 0, 0, 0, 0)
+  if (restrictions.min) {
+    const minRestrictionWithoutDays = restrictions.min
+    minRestrictionWithoutDays.setDate(1)
+    minRestrictionWithoutDays.setHours(0, 0, 0, 0)
+    if (testDate.valueOf() < minRestrictionWithoutDays.valueOf()) return false
+  }
+  if (restrictions.max) {
+    const maxRestrictionWithoutDays = restrictions.max
+    maxRestrictionWithoutDays.setDate(1)
+    maxRestrictionWithoutDays.setHours(0, 0, 0, 0)
+    if (testDate.valueOf() >= maxRestrictionWithoutDays.valueOf()) return false
+  }
+  return true
+}

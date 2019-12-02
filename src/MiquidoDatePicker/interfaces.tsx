@@ -35,6 +35,7 @@ export interface IMonthObject {
   selected: boolean
   eventsHandlers: { clickHandler: (index: number) => void }
   theme: ITheme
+  allowed?: boolean
 }
 
 export interface IYearObject {
@@ -84,6 +85,8 @@ export interface Props {
   close?: boolean
   name?: string
   onClick?: () => void
+  onOpen?: (node: any) => void
+  onClose?: () => void
   position?: string
   positionHorizontal?: string
 }

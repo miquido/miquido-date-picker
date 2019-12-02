@@ -7,4 +7,5 @@ export interface IMonth {
   displayValue: string | number
   itemIndex: number
   theme: ITheme
+  allowed: boolean
 }

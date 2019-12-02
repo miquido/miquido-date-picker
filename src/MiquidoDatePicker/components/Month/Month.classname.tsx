@@ -32,3 +32,14 @@ export const selectedMonthClass = style({
     }
   }
 })
+
+export const disabledClass = style({
+  color: '#c4c5ca',
+  cursor: 'not-allowed',
+  $nest: {
+    '&:hover': {
+      color: '#c4c5ca',
+      backgroundColor: 'transparent'
+    }
+  }
+})

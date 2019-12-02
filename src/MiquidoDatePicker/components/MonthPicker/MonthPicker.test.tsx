@@ -6,7 +6,8 @@ import { tripGateTheme } from '../../../themes/tripgate/tripgate_theme'
 describe('MonthPicker', () => {
   const mock = {
     months: [],
-    theme: tripGateTheme
+    theme: tripGateTheme,
+    displayedYear: 2019
   }
 
   const wrapper = shallow(<MonthPicker {...mock} />)
