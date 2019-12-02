@@ -291,7 +291,8 @@ const picker = style({
   position: 'absolute',
   backgroundColor: '#ffffff',
   minWidth: '450px',
-  zIndex: 500
+  zIndex: 500,
+  marginTop: '-29px'
 })
 
 const disabled = style({
