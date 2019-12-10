@@ -5,7 +5,8 @@
       "config/**/*.js",
       "node_modules/**/*.ts",
       "coverage/lcov-report/*.js",
-      "registerServiceWorker.ts"
+      "registerServiceWorker.ts",
+      "src/*.test.tsx"
     ],
     "rules": {
       "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],

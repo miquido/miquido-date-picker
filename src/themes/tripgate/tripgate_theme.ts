@@ -65,7 +65,8 @@ const daysHeaderDay = style({
   height: '25px',
   textAlign: 'center',
   fontFamily: 'Roboto',
-  margin: '0 3px'
+  margin: '0 3px',
+  fontWeight: 500
 })
 
 // FooterMenu
@@ -116,11 +117,11 @@ const saveBtn = style({
 const headerMenu = style({
   height: '50px',
   fontFamily: 'Roboto',
-  fontSize: '1.4em',
+  fontSize: '14px',
   fontWeight: 500,
   letterSpacing: '0.5px',
   textAlign: 'center',
-  color: '#444791',
+  color: '#333333',
   borderBottom: '1px solid rgba(196, 197, 202, 0.2)',
   backgroundColor: '#ffffff',
   display: 'flex',
@@ -139,11 +140,13 @@ const prevMonthBtn = style({
   position: 'absolute',
   top: '50%',
   left: '50px',
-  transform: 'translateX(-50%)'
+  transform: 'translateX(-50%)',
+  userSelect: 'none'
 })
 const monthSelectBtn = style({
   cursor: 'pointer',
   margin: '0 auto',
+  userSelect: 'none',
   $nest: {
     'img': {
       width: '15px',
@@ -157,7 +160,8 @@ const nextMonthBtn = style({
   position: 'absolute',
   top: '50%',
   right: '50px',
-  transform: 'translateX(-50%)'
+  transform: 'translateX(-50%)',
+  userSelect: 'none'
 })
 
 // Month
@@ -287,7 +291,8 @@ const picker = style({
   position: 'absolute',
   backgroundColor: '#ffffff',
   minWidth: '450px',
-  zIndex: 500
+  zIndex: 500,
+  marginTop: '-29px'
 })
 
 const disabled = style({

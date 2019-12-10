@@ -5,7 +5,7 @@ import { ITheme } from '../themes/theme.interface'
 export interface IDaysEventsHandlers {
   mouseUpHandler: (index: number) => void
   mouseDownHandler: (index: number) => void
-  mouseOverHandler: (index: number) => void
+  mouseOverHandler?: (index: number) => void
   clickHandler: (index: number) => void
 }
 
@@ -24,14 +24,18 @@ export interface IDayObject {
   start: boolean
   end: boolean
   itemIndex: number
+  date: Date
 }
 
+// TODO + readonly wywalic name ?
+// TODO sprawdzic czy jest w ogole potrzebne
 export interface IMonthObject {
   name: string
   itemIndex: number
   selected: boolean
   eventsHandlers: { clickHandler: (index: number) => void }
   theme: ITheme
+  allowed?: boolean
 }
 
 export interface IYearObject {
@@ -42,24 +46,49 @@ export interface IYearObject {
 }
 
 export interface IDefaultValue {
-  start: number
-  end: number
-  month: number
-  year: number
+  start?: Date
+  end?: Date
+  display: Date
+}
+
+export interface IRestrictions {
+  min?: Date
+  max?: Date
+}
+
+export interface IDoubleRestrictions extends IRestrictions {
+  start?: IRestrictions
+  end?: IRestrictions
 }
 
 export interface Props {
   children?: React.ReactElement<any>
   theme?: ITheme
   node?: React.RefObject<any>
-  singleSelection?: boolean
-  selectCallback?: (value: object) => void
+  type?: string
+  onSelect?: (value: object) => void
+  onInputChange?: (inputValue: string) => void
+  onError?: (value: object) => void
   defaultValue?: IDefaultValue | undefined
   beforeHeader?: React.ReactNode
   beforeDayNamesRow?: React.ReactNode
   beforeBody?: React.ReactNode
   beforeFooter?: React.ReactNode
   beforeEnd?: React.ReactNode
+  restrictions?: IDoubleRestrictions
+  inputClass?: string
+  disabled?: boolean
+  placeholder?: string
+  showOnlyStart?: boolean
+  showOnlyEnd?: boolean
+  open?: boolean
+  close?: boolean
+  name?: string
+  onClick?: () => void
+  onOpen?: (node: any) => void
+  onClose?: () => void
+  position?: string
+  positionHorizontal?: string
 }
 
 export interface State {
@@ -69,11 +98,52 @@ export interface State {
   selectMethod: selectMethods | undefined
   currentlyPicking: pickingOptions
   daysArray: IDayObject[]
-  selectedMonth: string
-  selectedMonthIndex: number
-  selectedYear: number
+  displayedMonth: string
+  displayedMonthIndex: number
+  displayedYear: number
   defaultValue?: IDefaultValue | undefined
   inputValue?: string | undefined
   userSelectedDaysBefore: boolean
   yearsList: IYearObject[]
+  selectedDate: ISelectedDate
+  disabled?: boolean | undefined
+  lastValidSelectedDate?: Date | undefined
+}
+
+export interface SingleSelectionState {
+  isPickerVisible: boolean
+  currentlyPicking: pickingOptions
+  displayedMonthIndex: number
+  displayedYear: number
+  defaultValue?: IDefaultValue | undefined
+  inputValue?: string | undefined
+  userSelectedDaysBefore: boolean
+  yearsList: IYearObject[]
+  selectedDate: ISelectedDate
+  disabled?: boolean | undefined
+  type?: string
+  userForcedClose: boolean
+  inputClass?: string | undefined
+  lastValidSelectedDate?: Date | undefined
+}
+
+export interface ISelectionCheck {
+  selectedStart: Date
+  selectedEnd?: Date
+  currentView: Date
+}
+
+// extends IDefaultValue ?
+export interface ISelectedDate {
+  start?: Date | null
+  end?: Date | null
+  display: Date | null
+}
+
+export interface ISelectionObject {
+  day?: number
+  month?: number
+  year?: number
+  dateString?: string
+  date?: Date
 }
