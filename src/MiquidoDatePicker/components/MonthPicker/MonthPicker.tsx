@@ -6,7 +6,6 @@ import { IMonthPicker } from './MonthPicker.interface'
 import { checkIfMonthIsAllowedToBeSelected, getClassFor } from '../../functions'
 
 const PickMonth = (props: IMonthPicker) => {
-
   const monthsGrid = props.months.map((month: IMonthObject, index: number) => {
 
     const isAllowed = checkIfMonthIsAllowedToBeSelected(month.itemIndex, props.displayedYear, props.restrictions)

@@ -52,7 +52,9 @@ export const getDayOfTheWeek = (monthIndex: number, year: number) => {
   date.setFullYear(year)
   date.setMonth(monthIndex)
   date.setDate(1)
-
+  if (date.getDay() === 0) {
+    return 6
+  }
   return date.getDay() - 1
 }
 
@@ -309,13 +311,13 @@ export const checkIfMonthIsAllowedToBeSelected = (monthIndex: number, displayedY
   if (!restrictions) return true
   const testDate = new Date(displayedYear, monthIndex, 1, 0, 0, 0, 0)
   if (restrictions.min) {
-    const minRestrictionWithoutDays = restrictions.min
+    const minRestrictionWithoutDays = new Date(restrictions.min)
     minRestrictionWithoutDays.setDate(1)
     minRestrictionWithoutDays.setHours(0, 0, 0, 0)
     if (testDate.valueOf() < minRestrictionWithoutDays.valueOf()) return false
   }
   if (restrictions.max) {
-    const maxRestrictionWithoutDays = restrictions.max
+    const maxRestrictionWithoutDays = new Date(restrictions.max)
     maxRestrictionWithoutDays.setDate(1)
     maxRestrictionWithoutDays.setHours(0, 0, 0, 0)
     if (testDate.valueOf() >= maxRestrictionWithoutDays.valueOf()) return false

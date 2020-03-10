@@ -82,7 +82,7 @@ cssRaw(`
 export default ReactDOM.render(
   <>
     <MiquidoDatePicker onSelect={console.log} onError={console.error} restrictions={{
-      min: new Date('2019-12-01')
+      min: new Date(2020, 1, 19)
     }}
     />
     {/*<MiquidoDatePicker*/}

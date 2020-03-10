@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as React from 'react'
 import HeaderMenu from './../components/HeaderMenu/HeaderMenu'
 import YearPicker from './../components/YearPicker/YearPicker'
@@ -491,7 +492,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
    *
    * @param year year in number eg. 2018
    */
-  async yearClickHandler (year: number) {
+  yearClickHandler (year: number) {
     this.setState({ displayedYear: year })
     this.switchToMonthSelect()
     this.updYearInInput(year)
@@ -502,7 +503,7 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
    *
    * @param index month index
    */
-  async monthClickHandler (index: number) {
+  monthClickHandler (index: number) {
     this.setState({ displayedMonthIndex: index })
     this.switchToDaySelect()
     this.updMonthInInput(index)
@@ -671,7 +672,6 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
     return this.state.inputValue || (this.state.defaultValue && this.setDefaultDate(this.state.defaultValue)) || ''
   }
   render () {
-
     return (
       <div className={getClassFor({ key: 'pickerWrapper', theme: this.theme, defaultClass: pickerWrapper })}
            ref={this.node}
@@ -741,7 +741,6 @@ class SingleSelection extends React.Component<Props, SingleSelectionState> {
               theme={this.theme}
             />
             {this.props.beforeBody}
-
             <PickDay pastDaysAmount={getDayOfTheWeek(this.state.displayedMonthIndex, this.state.displayedYear)}
                      eventsHandlers={this.eventsHandlers}
                      theme={this.theme}
