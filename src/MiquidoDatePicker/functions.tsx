@@ -320,7 +320,7 @@ export const checkIfMonthIsAllowedToBeSelected = (monthIndex: number, displayedY
     const maxRestrictionWithoutDays = new Date(restrictions.max)
     maxRestrictionWithoutDays.setDate(1)
     maxRestrictionWithoutDays.setHours(0, 0, 0, 0)
-    if (testDate.valueOf() >= maxRestrictionWithoutDays.valueOf()) return false
+    if (testDate.valueOf() > maxRestrictionWithoutDays.valueOf()) return false
   }
   return true
 }
